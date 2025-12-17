@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         isGround = (Physics.OverlapSphere(groundCheck.position, 0.1f, ground).Length > 0) ? true : false;
+        anim.SetBool("isGround", isGround);
         GroundMovement();
         Jump();
         SwitchAnim();
