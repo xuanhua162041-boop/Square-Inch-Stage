@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,10 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isGround, isJump;
 
+    [Header("配置人物朝向")]
+    public Vector3 initialScale = new Vector3(1,1,1);
+    private float defaultXScale;//记录初始x轴缩放
+
     bool jumpPressed;
     int jumpCount;
 
@@ -22,7 +27,22 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
         anim = GetComponent<Animator>();
+
+        //运行时应用初始朝向
+        transform.localScale = initialScale;
+        defaultXScale = Mathf.Sign(initialScale.x);//Mathf.Sign 输出-1\ 1
+
     }
+    private void OnValidate()//编辑器中实时生效
+    {
+        if (gameObject.activeInHierarchy)
+        {
+            transform.localScale = initialScale;
+            defaultXScale = MathF.Sign(initialScale.x);
+        }
+    }
+
+
 
     private void Update()
     {
@@ -47,8 +67,9 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector3(horizontalMove * speed, rb.velocity.y, 0);
         if (horizontalMove != 0)//进行左右反转
         {
-            transform.localScale = new Vector3(horizontalMove, 1, 1);
+            transform.localScale = new Vector3(horizontalMove*defaultXScale, 1, 1);
         }
+    
     }
 
     void Jump()
