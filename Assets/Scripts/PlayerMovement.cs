@@ -100,13 +100,14 @@ public class PlayerMovement : MonoBehaviour
         anim.SetFloat("running", Mathf.Abs(rb.velocity.x));
         if (isGround)
         {
+            anim.SetBool("jumping", false);
             anim.SetBool("falling", false);
         }
         else if (!isGround && rb.velocity.y > 0)
         {
             anim.SetBool("jumping", true);
         }
-        else if (rb.velocity.y < 0)
+        else if (rb.velocity.y < 0.01||isGround)
         {
             anim.SetBool("jumping", false);
             anim.SetBool("falling", true);
