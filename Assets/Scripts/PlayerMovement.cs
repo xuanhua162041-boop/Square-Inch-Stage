@@ -11,9 +11,10 @@ public class PlayerMovement : MonoBehaviour
 
     public float speed, jumpForce;
     public Transform groundCheck;
+    public Transform deathCheck;
     public LayerMask ground;
 
-    public bool isGround, isJump;
+    public bool isGround, isJump,isDeath;
 
     [Header("配置人物朝向")]
     public Vector3 initialScale = new Vector3(1,1,1);
@@ -24,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        isDeath = false;
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
         anim = GetComponent<Animator>();
@@ -46,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Jump") && jumpCount > 0)
+        if (Input.GetButtonDown("Jump") && jumpCount > 0&& !isDeath)
         {
             jumpPressed = true;
 
@@ -55,11 +57,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDeath) return;
         isGround = (Physics.OverlapSphere(groundCheck.position, 0.1f, ground).Length > 0) ? true : false;
+        isDeath = (Physics.OverlapSphere(deathCheck.position, 0.5f, ground).Length > 1) ? true : false;
         anim.SetBool("isGround", isGround);
         GroundMovement();
         Jump();
         SwitchAnim();
+        if (isDeath)
+        {
+            Death();
+        }
     }
     void GroundMovement()
     {
@@ -113,5 +121,12 @@ public class PlayerMovement : MonoBehaviour
             anim.SetBool("falling", true);
 
         }
+    }
+
+    public void Death()
+    {
+        Debug.Log("玩家已死亡");
+        anim.SetBool("die", true);
+
     }
 }

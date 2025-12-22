@@ -8,10 +8,12 @@ public class ShadowPlatformObject : MonoBehaviour
     [Header("设置")]
     public string lightTag = "ShadowLight";//灯光的tag
 
-    public LayerMask wallLayer;//接受影子
+    public LayerMask wallLayer = 7;//接受影子
 
     [Tooltip("生成的物理平台的厚度")]
-    public float platformThickness = 0.2f;
+    public float platformThickness = 2f;
+    [Tooltip("生成的物理平台的指定方向")]
+    public Vector3 fixedExtrudeDir = Vector3.back;
 
     [SerializeField]
     [Tooltip("Shadow的私有属性")]
@@ -36,6 +38,7 @@ public class ShadowPlatformObject : MonoBehaviour
 
     private void Start()
     {
+        this.gameObject.layer = 8;
         //寻找所有的灯
         GameObject[] lights = GameObject.FindGameObjectsWithTag(lightTag);
         if (lights.Length == 0)
@@ -146,8 +149,8 @@ public class ShadowPlatformObject : MonoBehaviour
         //用来存储 墙上的影子 点
         List<Vector3> baseVerticesWorld = new List<Vector3>();
 
-        //存储 '墙面朝向'(法线)  用于挤出厚度
-        Vector3 extrusionDirection = Vector3.zero;
+        //存储 '墙面朝向'(法线)  用于挤出厚度（现改为指定方向
+        //Vector3 extrusionDirection = Vector3.zero;
 
         //存储 射线打中墙的信息
         RaycastHit hitInfo;
@@ -167,19 +170,28 @@ public class ShadowPlatformObject : MonoBehaviour
                 //射到 墙 就把   在[墙上的点] 存进列表
                 baseVerticesWorld.Add(hitInfo.point);
                 //记一下 墙是朝向哪边的(法线)  决定 网格朝哪个方向 增加厚度
-                if (extrusionDirection == Vector3.zero)
+                /*if (extrusionDirection == Vector3.zero)
                 {
                     extrusionDirection = hitInfo.normal;
-                }
+                }*/
             }
         }//以上 是存储了 影子在墙上的 顶点
 
         //顶点不够成为一个面 则清空并退出
-        if (baseVerticesWorld.Count < 3)
+        if (baseVerticesWorld.Count < 2)//原本是3 ， 这里是为了出现 一条线的影子
         {
             data.mesh.Clear();
             return;
         }
+
+        //如果 只有2 个点  或者点都在一条线上 
+        //此时用凸包会报错， 所以 加一个偏移点成为三角形， 挤出后就是三棱柱
+        if(baseVerticesWorld.Count == 2)
+        {
+            Vector3 fakePoint = baseVerticesWorld[0] + Vector3.up * 0.01f;
+            baseVerticesWorld.Add(fakePoint);
+        }
+
 
         int numBaseVertices = baseVerticesWorld.Count;
         //创建一个新的顶点数组  长度是 定点数的2倍
@@ -194,7 +206,7 @@ public class ShadowPlatformObject : MonoBehaviour
             allVertices[i] = transform.InverseTransformPoint(baseVerticesWorld[i]);
             //2.处理 [挤压出的点]  计算出 挤压的点的位置 并转换  起点+(方向*距离)
             allVertices[i + numBaseVertices] = transform.InverseTransformPoint(
-                baseVerticesWorld[i] + extrusionDirection * platformThickness);
+                baseVerticesWorld[i] + fixedExtrudeDir * platformThickness);
         }
         //以上 生成 并存储了 墙上的顶点 和 挤出的顶点
 
@@ -241,6 +253,7 @@ public class ShadowPlatformObject : MonoBehaviour
         data.mesh.RecalculateNormals();
         data.mesh.RecalculateBounds();
         //把生成的网格 给meshCollider
+        data.col.sharedMesh = null;
         data.col.sharedMesh = data.mesh;
 
     }

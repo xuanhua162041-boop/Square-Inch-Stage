@@ -405,20 +405,6 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
-                    "m_Id": "37f8a77c049f4817ae82af799c3a8f1a"
-                },
-                "m_SlotId": 2
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "06762137234e48f59553733aa58f4bde"
-                },
-                "m_SlotId": 0
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
                     "m_Id": "3cfd450e68df414d8bb76cce399e3c2e"
                 },
                 "m_SlotId": 2
@@ -524,6 +510,20 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "37f8a77c049f4817ae82af799c3a8f1a"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "7ec60360fb094273aa26b5b76415945b"
+                },
+                "m_SlotId": 2
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "4b4046ad9b694c518be6caa772b6861b"
                 },
                 "m_SlotId": 0
             }
@@ -650,6 +650,20 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "f89b6cd7bdbc404981a0ef7a4de61674"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "c43e52388e71484e8bc6e5d7cca37ead"
+                },
+                "m_SlotId": 7
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "87da4813fbcd47fe892da4cb2cf27ceb"
                 },
                 "m_SlotId": 0
             }
@@ -888,7 +902,7 @@
     },
     "m_PreviewData": {
         "serializedMesh": {
-            "m_SerializedMesh": "{\"mesh\":{\"fileID\":10202,\"guid\":\"0000000000000000e000000000000000\",\"type\":0}}",
+            "m_SerializedMesh": "{\"mesh\":{\"fileID\":10200,\"guid\":\"0000000000000000e000000000000000\",\"type\":0}}",
             "m_Guid": ""
         },
         "preventRotation": false
@@ -991,7 +1005,7 @@
         }
     ],
     "synonyms": [],
-    "m_Precision": 0,
+    "m_Precision": 1,
     "m_PreviewExpanded": true,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 0,
@@ -1543,7 +1557,7 @@
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "MainTexture",
     "m_DefaultReferenceName": "_MainTexture",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_MainTex",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
@@ -2139,7 +2153,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "AlphaClipThreshold",
     "m_StageCapability": 2,
-    "m_Value": 0.4699999988079071,
+    "m_Value": 0.5,
     "m_DefaultValue": 0.5,
     "m_Labels": []
 }
@@ -2468,7 +2482,7 @@
     "m_ZTestMode": 4,
     "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
-    "m_RenderFace": 2,
+    "m_RenderFace": 0,
     "m_AlphaClip": true,
     "m_CastShadows": true,
     "m_ReceiveShadows": true,
@@ -4972,10 +4986,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 130.39991760253907,
-            "y": -332.0000305175781,
-            "width": 208.00013732910157,
-            "height": 431.9999694824219
+            "x": 11.200005531311036,
+            "y": -331.20001220703127,
+            "width": 207.99998474121095,
+            "height": 432.0000305175781
         }
     },
     "m_Slots": [
