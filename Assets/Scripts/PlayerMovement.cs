@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float speed, jumpForce;
     public Transform groundCheck;
     public Transform deathCheck;
-    public LayerMask ground;
+    public LayerMask Shadow;
 
     public bool isGround, isJump,isDeath;
 
@@ -58,8 +58,8 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (isDeath) return;
-        isGround = (Physics.OverlapSphere(groundCheck.position, 0.1f, ground).Length > 0) ? true : false;
-        isDeath = (Physics.OverlapSphere(deathCheck.position, 0.5f, ground).Length > 1) ? true : false;
+        isGround = (Physics.OverlapSphere(groundCheck.position, 0.1f, Shadow).Length > 0) ? true : false;
+        isDeath = (Physics.OverlapSphere(deathCheck.position, 0.5f, Shadow).Length > 1) ? true : false;
         anim.SetBool("isGround", isGround);
         GroundMovement();
         Jump();

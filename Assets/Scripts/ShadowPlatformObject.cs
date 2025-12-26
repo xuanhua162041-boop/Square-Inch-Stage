@@ -1,35 +1,35 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class ShadowPlatformObject : MonoBehaviour
 {
-    [Header("ÉèÖÃ")]
-    public string lightTag = "ShadowLight";//µÆ¹âµÄtag
+    [Header("è®¾ç½®")]
+    public string lightTag = "ShadowLight";//ç¯å…‰çš„tag
 
-    public LayerMask wallLayer = 7;//½ÓÊÜÓ°×Ó
+    public LayerMask wallLayer = 7;//æ¥å—å½±å­
 
-    [Tooltip("Éú³ÉµÄÎïÀíÆ½Ì¨µÄºñ¶È")]
+    [Tooltip("ç”Ÿæˆçš„ç‰©ç†å¹³å°çš„åšåº¦")]
     public float platformThickness = 2f;
-    [Tooltip("Éú³ÉµÄÎïÀíÆ½Ì¨µÄÖ¸¶¨·½Ïò")]
+    [Tooltip("ç”Ÿæˆçš„ç‰©ç†å¹³å°çš„æŒ‡å®šæ–¹å‘")]
     public Vector3 fixedExtrudeDir = Vector3.back;
 
     [SerializeField]
-    [Tooltip("ShadowµÄË½ÓĞÊôĞÔ")]
+    [Tooltip("Shadowçš„ç§æœ‰å±æ€§")]
     private class ShadowData
     {
-        public Light lightObj; //ÄÄ¸öµÆ
-        public Transform lightTrans;  //µÆµÄtransformÒıÓÃ
-        public Mesh mesh;  //Ó°×ÓÍø¸ñ
-        public MeshCollider col;  //Ó°×ÓµÄÅö×²Ìå
-        public Vector3 lastLightPos;  //µÆµÄÉÏ´ÎµÄÎ»ÖÃ
-        public Quaternion lastLightRot;  //µÆÉÏ´ÎµÄĞı×ª
+        public Light lightObj; //å“ªä¸ªç¯
+        public Transform lightTrans;  //ç¯çš„transformå¼•ç”¨
+        public Mesh mesh;  //å½±å­ç½‘æ ¼
+        public MeshCollider col;  //å½±å­çš„ç¢°æ’ä½“
+        public Vector3 lastLightPos;  //ç¯çš„ä¸Šæ¬¡çš„ä½ç½®
+        public Quaternion lastLightRot;  //ç¯ä¸Šæ¬¡çš„æ—‹è½¬
     }
-    //¹ÜÀíËùÓĞÓ°×ÓµÄÁĞ±í  ÒòÎª¶à¸öµÆ»á²úÉú¶à¸öÓ°×Ó
+    //ç®¡ç†æ‰€æœ‰å½±å­çš„åˆ—è¡¨  å› ä¸ºå¤šä¸ªç¯ä¼šäº§ç”Ÿå¤šä¸ªå½±å­
     private List<ShadowData> shadowPool = new List<ShadowData>();
 
-    //¼ÇÂ¼ ×Ô¼ºÉÏÒ»´ÎµÄÎ»ÖÃ
+    //è®°å½• è‡ªå·±ä¸Šä¸€æ¬¡çš„ä½ç½®
     private Vector3 lastSelfPos;
     private Quaternion lastSelfRot;
 
@@ -38,50 +38,50 @@ public class ShadowPlatformObject : MonoBehaviour
 
     private void Start()
     {
-        this.gameObject.layer = 8;
-        //Ñ°ÕÒËùÓĞµÄµÆ
+        //å¯»æ‰¾æ‰€æœ‰çš„ç¯
         GameObject[] lights = GameObject.FindGameObjectsWithTag(lightTag);
         if (lights.Length == 0)
         {
-            Debug.Log("Î´ÕÒµ½ ±ê¼ÇÎªlightTag µÄµÆ¹â ");
+            Debug.Log("æœªæ‰¾åˆ° æ ‡è®°ä¸ºlightTag çš„ç¯å…‰ ");
             return;
         }
 
-        //¸øÃ¿¸öµÆÉú³ÉÒ»¸ö×ÓÎïÌå
-        foreach (var l in lights) { 
-          CreateShadowChild(l.GetComponent<Light>());
+        //ç»™æ¯ä¸ªç¯ç”Ÿæˆä¸€ä¸ªå­ç‰©ä½“
+        foreach (var l in lights)
+        {
+            CreateShadowChild(l.GetComponent<Light>());
         }
-        //³õÊ¼»¯Î»ÖÃ¼ÇÂ¼
+        //åˆå§‹åŒ–ä½ç½®è®°å½•
         lastSelfPos = transform.position;
         lastSelfRot = transform.rotation;
 
-        //µÚÒ»´Î½øĞĞÇ¿ÖÆ¼ÆËã(ÒòÎªÊÇÀÁ¼ÓÔØ)
+        //ç¬¬ä¸€æ¬¡è¿›è¡Œå¼ºåˆ¶è®¡ç®—(å› ä¸ºæ˜¯æ‡’åŠ è½½)
         UpdateAllShadows();
-        
+
     }
 
     void CreateShadowChild(Light lightSource)
     {
         if (lightSource == null) return;
-        //´´½¨×ÓÎïÌå
+        //åˆ›å»ºå­ç‰©ä½“
         GameObject go = new GameObject($"Shadow_{lightSource.name}");
         go.layer = 6;
-        go.transform.SetParent(this.transform,false);
+        go.transform.SetParent(this.transform, false);
         go.transform.localPosition = Vector3.zero;
         go.transform.localRotation = Quaternion.identity;
 
-        //Ìí¼Ó×é¼ş
+        //æ·»åŠ ç»„ä»¶
         MeshFilter mf = go.AddComponent<MeshFilter>();
         MeshRenderer mr = go.AddComponent<MeshRenderer>();
         MeshCollider mc = go.AddComponent<MeshCollider>();
 
-        //ÉèÖÃÊôĞÔ
+        //è®¾ç½®å±æ€§
         mr.enabled = false;
         mc.convex = true;
         Mesh m = new Mesh { name = "ShadowMesh" };
         mf.mesh = m;
 
-        //´æÈëÊı¾İÁĞ±í
+        //å­˜å…¥æ•°æ®åˆ—è¡¨
         ShadowData data = new ShadowData();
         data.lightObj = lightSource;
         data.lightTrans = lightSource.transform;
@@ -94,32 +94,32 @@ public class ShadowPlatformObject : MonoBehaviour
 
     private void Update()
     {
-        //1.¼ì²é×Ô¼º¶¯Ã»¶¯
-        bool selfMoved = (transform.position!=lastSelfPos)|| (transform.rotation!=lastSelfRot);
-        //2.¼ì²éµÆ¶¯Ã»¶¯
-        bool anyLightMoved =false;
-        foreach(var data in shadowPool)
+        //1.æ£€æŸ¥è‡ªå·±åŠ¨æ²¡åŠ¨
+        bool selfMoved = (transform.position != lastSelfPos) || (transform.rotation != lastSelfRot);
+        //2.æ£€æŸ¥ç¯åŠ¨æ²¡åŠ¨
+        bool anyLightMoved = false;
+        foreach (var data in shadowPool)
         {
             if (data.lightObj == null) continue;
-            if (data.lightTrans.position!= data.lastLightPos || data.lightTrans.rotation!=data.lastLightRot)
+            if (data.lightTrans.position != data.lastLightPos || data.lightTrans.rotation != data.lastLightRot)
             {
                 anyLightMoved = true;
                 break;
             }
         }
 
-        if (selfMoved || anyLightMoved) 
+        if (selfMoved || anyLightMoved)
         {
             UpdateAllShadows();
 
-            //¸üĞÂ¼ÇÂ¼
+            //æ›´æ–°è®°å½•
             lastSelfPos = transform.position;
             lastSelfRot = transform.rotation;
-            foreach(var data in shadowPool)
+            foreach (var data in shadowPool)
             {
-                if(data.lightObj == null) continue;
-                data.lastLightPos=data.lightTrans.position;
-                data.lastLightRot=data.lightTrans.rotation;
+                if (data.lightObj == null) continue;
+                data.lastLightPos = data.lightTrans.position;
+                data.lastLightRot = data.lightTrans.rotation;
             }
         }
     }
@@ -129,137 +129,300 @@ public class ShadowPlatformObject : MonoBehaviour
 
         MeshFilter casterMesh = GetComponent<MeshFilter>();
         if (casterMesh == null) return;
-        //»ñÈ¡µ½ÕÏ°­ÎïµÄ ËùÓĞ¶¥µã
-        Vector3[]vertices = casterMesh.sharedMesh.vertices;
-        //¶ÔÃ¿¸öÓ°×Ó½øĞĞ¼ÆËã
-        foreach(var data in shadowPool)
+        //è·å–åˆ°éšœç¢ç‰©çš„ æ‰€æœ‰é¡¶ç‚¹
+        Vector3[] vertices = casterMesh.sharedMesh.vertices;
+        //å¯¹æ¯ä¸ªå½±å­è¿›è¡Œè®¡ç®—
+        foreach (var data in shadowPool)
         {
             if (data.lightObj == null) continue;
             CalculateSingleShadow(data, vertices);
 
         }
-
-
-
-        
     }
 
-    void CalculateSingleShadow(ShadowData data , Vector3[] vertices)
+    void CalculateSingleShadow(ShadowData data, Vector3[] vertices)
     {
-        //ÓÃÀ´´æ´¢ Ç½ÉÏµÄÓ°×Ó µã
+        // ç”¨æ¥å­˜å‚¨ å¢™ä¸Šçš„å½±å­ ç‚¹
         List<Vector3> baseVerticesWorld = new List<Vector3>();
 
-        //´æ´¢ 'Ç½Ãæ³¯Ïò'(·¨Ïß)  ÓÃÓÚ¼·³öºñ¶È£¨ÏÖ¸ÄÎªÖ¸¶¨·½Ïò
-        //Vector3 extrusionDirection = Vector3.zero;
-
-        //´æ´¢ ÉäÏß´òÖĞÇ½µÄĞÅÏ¢
         RaycastHit hitInfo;
-        var lightposition = data.lightTrans.position;//¼ÇÂ¼µÆµÄÎ»ÖÃ
+        var lightposition = data.lightTrans.position;
 
-        //±éÀúÕÏ°­ÎïµÄÃ¿Ò»¸ö¶¥µã
+        // è·å–ç¯å…‰å‚æ•°
+        float lightRange = data.lightObj.range;
+        float halfSpotAngle = data.lightObj.spotAngle * 0.5f;
+        Vector3 lightForward = data.lightTrans.forward;
+        bool isSpot = data.lightObj.type == LightType.Spot;
+
+        // å®¹é”™ç¼“å†²åŒºï¼šè®©æ£€æµ‹èŒƒå›´æ¯”å®é™…ç¯å…‰ç¨å¾®å¤§ä¸€ç‚¹ (ä¾‹å¦‚ 10%)
+        // ä½œç”¨ï¼šé˜²æ­¢ç‰©ä½“åœ¨å…‰ç…§è¾¹ç¼˜ç§»åŠ¨æ—¶å½±å­é¢‘ç¹é—ªçƒæˆ–æ–­è£‚
+        float rangeBuffer = 1.1f;
+        float angleBuffer = 5f; // è§’åº¦æ”¾å®½ 5 åº¦
+
+        //è®°å½•å¢™é¢çš„æ³•çº¿
+        Vector3 wallNormal = Vector3.zero;
+        bool hasNormal = false;
+
+        // 1. éå†éšœç¢ç‰©çš„æ¯ä¸€ä¸ªé¡¶ç‚¹ï¼Œæ”¶é›†å½±å­ç‚¹
         foreach (var vertex in vertices)
         {
-            //1.[×ø±ê×ª»»] °Ñ¶¥µãµÄ'¾Ö²¿×ø±ê' ×ª»»Îª'ÊÀ½ç×ø±ê'
-            //ÒòÎªÕÏ°­Îï¿ÉÄÜÒÆ¶¯ÁË  ËùÒÔĞèÒªÊÀ½çÖĞµÄÕæÊµÎ»ÖÃ
             Vector3 worldVertex = transform.TransformPoint(vertex);
-            //2.¼ÆËã³ö ¹âÔ´->ÕÏ°­Îï¶¥µãµÄ ·½Ïò
-            Vector3 dirFromLight = (worldVertex - lightposition).normalized;
-            //3.´Ó¹âÔ´³ö·¢ ÑØ·½ÏòÉä³ö,Ö±µ½¼ì²âµ½wallLayer²ã
-            if (Physics.Raycast(lightposition, dirFromLight, out hitInfo, 100f, wallLayer))
+            Vector3 toVertexDir = worldVertex - lightposition;
+            float disToVertex = toVertexDir.magnitude; // å…‰åˆ°ç‰©ä½“çš„è·ç¦»
+
+            #region å½±å­å¹³å°ç”Ÿæˆæ¡ä»¶æ ¡éªŒ (å¸¦å®¹é”™)
+
+            // ç¬¬ä¸€é“å®‰æ£€ï¼šè·ç¦» (ä¹˜ä¸Š 1.1 å€å®¹é”™)
+            if (disToVertex > lightRange * rangeBuffer) continue;
+
+            // ç¬¬äºŒé“å®‰æ£€ï¼šè§’åº¦ (å¦‚æœæ˜¯èšå…‰ç¯ï¼ŒåŠ ä¸Š 5 åº¦å®¹é”™)
+            if (isSpot)
             {
-                //Éäµ½ Ç½ ¾Í°Ñ   ÔÚ[Ç½ÉÏµÄµã] ´æ½øÁĞ±í
-                baseVerticesWorld.Add(hitInfo.point);
-                //¼ÇÒ»ÏÂ Ç½ÊÇ³¯ÏòÄÄ±ßµÄ(·¨Ïß)  ¾ö¶¨ Íø¸ñ³¯ÄÄ¸ö·½Ïò Ôö¼Óºñ¶È
-                /*if (extrusionDirection == Vector3.zero)
-                {
-                    extrusionDirection = hitInfo.normal;
-                }*/
+                float angle = Vector3.Angle(lightForward, toVertexDir);
+                if (angle > halfSpotAngle + angleBuffer) continue;
             }
-        }//ÒÔÉÏ ÊÇ´æ´¢ÁË Ó°×ÓÔÚÇ½ÉÏµÄ ¶¥µã
 
-        //¶¥µã²»¹»³ÉÎªÒ»¸öÃæ ÔòÇå¿Õ²¢ÍË³ö
-        if (baseVerticesWorld.Count < 2)//Ô­±¾ÊÇ3 £¬ ÕâÀïÊÇÎªÁË³öÏÖ Ò»ÌõÏßµÄÓ°×Ó
-        {
-            data.mesh.Clear();
-            return;
+            #endregion
+
+            Vector3 dirFromLight = toVertexDir.normalized;
+            // è®¡ç®—å‰©ä½™å°„ç¨‹
+            float remainingRange = (lightRange * rangeBuffer) - disToVertex;
+            if (remainingRange <= 0) continue;
+
+            // å°„çº¿èµ·ç‚¹å¾€åä¸€ç‚¹ç‚¹ï¼Œé˜²æ­¢æ‰“ä¸­ç‰©ä½“è‡ªå·±
+            Vector3 startPos = worldVertex + dirFromLight * 0.01f;
+
+            // 2. å°„çº¿æ£€æµ‹ (æ¥åŠ›æ¨¡å¼)
+            if (Physics.Raycast(startPos, dirFromLight, out hitInfo, remainingRange, wallLayer))
+            {
+                baseVerticesWorld.Add(hitInfo.point);
+
+                // è®°å½•å¢™é¢æ³•çº¿ï¼Œç”¨äºåç»­æŒ¤å‡ºæ–¹å‘
+                if (!hasNormal)
+                {
+                    wallNormal = hitInfo.normal;
+                    hasNormal = true;
+                }
+            }
         }
 
-        //Èç¹û Ö»ÓĞ2 ¸öµã  »òÕßµã¶¼ÔÚÒ»ÌõÏßÉÏ 
-        //´ËÊ±ÓÃÍ¹°ü»á±¨´í£¬ ËùÒÔ ¼ÓÒ»¸öÆ«ÒÆµã³ÉÎªÈı½ÇĞÎ£¬ ¼·³öºó¾ÍÊÇÈıÀâÖù
-        if(baseVerticesWorld.Count == 2)
+        // 3. å‡¸åŒ…å¤„ç†ï¼šæ•´ç†ä¹±åºç‚¹ï¼Œé˜²æ­¢å¤§é•¿æ–¹ä½“ç”Ÿæˆçš„ç¢°æ’ä½“ç¼©æˆä¸€å›¢
+        baseVerticesWorld = GetConvexHull(baseVerticesWorld);
+
+        // 4. "æ™¾è¡£çº¿"ä¿®å¤é€»è¾‘ï¼šå¦‚æœå½±å­å¤ªç»†(å…±çº¿)æˆ–è€…ç‚¹å¤ªå°‘ï¼Œæ‰‹åŠ¨å¢è‚¥å˜æˆæ¿å­
+        // è¿™æ­¥è§£å†³äº† "Coplanar" æŠ¥é”™ï¼Œä¹Ÿè§£å†³äº†ç»†çº¿æ— æ³•ç«™äººçš„é—®é¢˜
+        if (baseVerticesWorld.Count < 3 || IsCollinear(baseVerticesWorld))
         {
-            Vector3 fakePoint = baseVerticesWorld[0] + Vector3.up * 0.01f;
-            baseVerticesWorld.Add(fakePoint);
+            // å¦‚æœç‚¹å®åœ¨å¤ªå°‘(å°‘äº2ä¸ª)ï¼Œè¿çº¿éƒ½æˆä¸äº†ï¼Œç›´æ¥ä¸ç”Ÿæˆ
+            if (baseVerticesWorld.Count < 2)
+            {
+                data.mesh.Clear();
+                return;
+            }
+
+            Vector3 startP = baseVerticesWorld[0];
+            Vector3 endP = baseVerticesWorld[baseVerticesWorld.Count - 1];
+
+            // ç®—å‡ºçº¿çš„æ–¹å‘
+            Vector3 lineDir = (endP - startP).normalized;
+            // é˜²æ­¢é‡åˆç‚¹å¯¼è‡´æ–¹å‘ä¸º0
+            if (lineDir == Vector3.zero) lineDir = Vector3.right;
+
+            // è®¾ç½® å½±å­çš„"å®ä½“å®½åº¦" (å‘ä¸‹å»¶ä¼¸çš„è·ç¦»)
+            float thicknessAmount = 0.2f;
+            Vector3 expandDir = Vector3.down; // é»˜è®¤å‘ä¸‹æŒ¤å‡º (ä½ çš„æ€è·¯)
+
+            // ç‰¹æ®Šæƒ…å†µå¤„ç†ï¼šä¸‡ä¸€å½±å­æ˜¯ç«–ç€çš„ä¸€æ ¹æŸ±å­ï¼Œå¾€ä¸‹æŒ¤æ²¡ç”¨ï¼Œå¾—å¾€ä¾§é¢æŒ¤
+            // åˆ¤æ–­æ–¹æ³•ï¼šçœ‹çº¿çš„æ–¹å‘æ˜¯ä¸æ˜¯å·®ä¸å¤šå‚ç›´çš„ (Yè½´åˆ†é‡å¾ˆå¤§)
+            if (Mathf.Abs(lineDir.y) > 0.9f)
+            {
+                expandDir = Vector3.right; // ç«–çº¿å°±å˜ç²—
+            }
+
+            // é‡å»ºçŸ©å½¢ï¼šæŠŠ çº¿æ®µ + å‘ä¸‹å»¶ä¼¸çš„çº¿æ®µ ç»„åˆèµ·æ¥ï¼Œå½¢æˆä¸€ä¸ªé¢
+            baseVerticesWorld.Clear();
+            baseVerticesWorld.Add(startP);
+            baseVerticesWorld.Add(endP);
+            baseVerticesWorld.Add(endP + expandDir * thicknessAmount);
+            baseVerticesWorld.Add(startP + expandDir * thicknessAmount);
         }
 
+        // ä¿åº•é€»è¾‘ï¼šå¦‚æœå…¨è¿‡ç¨‹æ²¡æ‹¿åˆ°æ³•çº¿(æ¯”å¦‚åªè§¦å‘äº†æ™¾è¡£çº¿é€»è¾‘)ï¼Œæ‰ç”¨é»˜è®¤æ–¹å‘ï¼›å¦åˆ™å¼ºåˆ¶ç”¨å¢™é¢æ³•çº¿
+        if (wallNormal == Vector3.zero) wallNormal = -fixedExtrudeDir;
+
+        // --- ä»¥ä¸‹ç”Ÿæˆç½‘æ ¼ä»£ç  ---
 
         int numBaseVertices = baseVerticesWorld.Count;
-        //´´½¨Ò»¸öĞÂµÄ¶¥µãÊı×é  ³¤¶ÈÊÇ ¶¨µãÊıµÄ2±¶
-        //Ç°Ò»°ë´æ´¢ [Ç½ÉÏµÄµã]  ºóÒ»°ë´æ´¢[¼·³öµÄµã]
         var allVertices = new Vector3[numBaseVertices * 2];
 
-        //´´½¨ËùÓĞ¶¥µã
         for (int i = 0; i < numBaseVertices; i++)
         {
-            //1.´¦Àí[Ç½ÉÏµÄµã]
-            //°ÑÇ½ÉÏµã ×ª»»Îª ¾Ö²¿×ø±ê ÌîÈëÊı×éµÄÇ°°ë²¿·Ö
+            // 1. å¢™ä¸Šçš„ç‚¹ (èƒŒé¢)
             allVertices[i] = transform.InverseTransformPoint(baseVerticesWorld[i]);
-            //2.´¦Àí [¼·Ñ¹³öµÄµã]  ¼ÆËã³ö ¼·Ñ¹µÄµãµÄÎ»ÖÃ ²¢×ª»»  Æğµã+(·½Ïò*¾àÀë)
-            allVertices[i + numBaseVertices] = transform.InverseTransformPoint(
-                baseVerticesWorld[i] + fixedExtrudeDir * platformThickness);
+
+            // 2. æŒ¤å‡ºçš„ç‚¹ (æ­£é¢) - æ ¸å¿ƒä¿®å¤ï¼šä½¿ç”¨å¢™é¢æ³•çº¿ wallNormal è¿›è¡ŒæŒ¤å‡º
+            // è¿™æ ·æ— è®ºå¢™é¢æ—‹è½¬è§’åº¦å¦‚ä½•ï¼Œå½±å­éƒ½ä¼šå‚ç›´äºå¢™é¢ç”Ÿé•¿ï¼Œä¿è¯æœ‰ä½“ç§¯
+            Vector3 extrudePos = baseVerticesWorld[i] + wallNormal * platformThickness;
+            allVertices[i + numBaseVertices] = transform.InverseTransformPoint(extrudePos);
         }
-        //ÒÔÉÏ Éú³É ²¢´æ´¢ÁË Ç½ÉÏµÄ¶¥µã ºÍ ¼·³öµÄ¶¥µã
 
-        //1. ¼ÆËã ÌùÇ½Ãæ ÔõÃ´Á¬Ïß
+        // è®¡ç®—ä¸‰è§’å½¢è¿çº¿
         int[] baseTriangles = TriangulateConvexPolygon(numBaseVertices, 0);
-        //2. ¼ÆËã ³¯ÍâÃæ ÔõÃ´Á¬Ïß
         int[] extrusTrangles = TriangulateConvexPolygon(numBaseVertices, numBaseVertices);
+        System.Array.Reverse(extrusTrangles); // åè½¬æ­£é¢æ³•çº¿
 
-        //·´×ª[³¯ÍâÃæ] µÄË³Ğò
-        //Èç¹ûÕâÁ½¸öÃæÊÇÍ¬Ò»¸öË³Ğò ³¯ÍâµÄÃæ ¾ÍÊÇ±³Ãæ  ÎïÀíÒıÇæÎŞ·¨¼ì²â   ËùÒÔ·´×ªºó ±äÎªÁËÕıÃæ
-        System.Array.Reverse(extrusTrangles);
-
-        //°Ñ Á½¸öÃæµÄÁ´½ÓÊı¾İ´æ·Åµ½Ò»¸ö´óÁĞ±íÖĞ
         var triangles = new List<int>();
         triangles.AddRange(baseTriangles);
         triangles.AddRange(extrusTrangles);
 
-        //3.ÊÖ¶¯·ìºÏ ²àÃæ
-        //Á´½Ó ÀïÍâÁ½²ãµã  °Ñ²àÃæµÄ·ìÏ¶Ìî²¹ÉÏ
+        // æ‰‹åŠ¨ç¼åˆä¾§é¢
         for (int i = 0; i < numBaseVertices; i++)
         {
-            //Ëã³ö ËÄ¸ö¹Ø¼üµãµÄ±àºÅ
             int currentFront = i;
-            int nextFront = (i + 1) % numBaseVertices;//È¡ÓàÊÇÎªÁË ×îºóÒ»¸öµã Á´»Ø 0 µã
+            int nextFront = (i + 1) % numBaseVertices;
             int currentBack = i + numBaseVertices;
             int nextBack = ((i + 1) % numBaseVertices) + numBaseVertices;
 
-            //»­³ö²àÃæµÄÈı½ÇĞÎ
             triangles.Add(currentFront);
             triangles.Add(nextBack);
             triangles.Add(nextFront);
 
-            //µÚ¶ş¸öÈı½ÇĞÎ
             triangles.Add(currentFront);
             triangles.Add(currentBack);
             triangles.Add(nextBack);
-
         }
 
+        // èµ‹å€¼ä¸åˆ·æ–°
         data.mesh.Clear();
-        data.mesh.vertices = allVertices;//ÌîÈëµã
-        data.mesh.triangles = triangles.ToArray();//ÌîÈëÁ¬Ïß
-        //¼ÆËã ¹âÕÕºÍ °üÎ§ºĞ
+        data.mesh.vertices = allVertices;
+        data.mesh.triangles = triangles.ToArray();
+
         data.mesh.RecalculateNormals();
         data.mesh.RecalculateBounds();
-        //°ÑÉú³ÉµÄÍø¸ñ ¸ømeshCollider
+
+        // é‡æ–°èµ‹å€¼ç»™ Collider (å…ˆç½®ç©ºä»¥å¼ºåˆ¶åˆ·æ–°)
         data.col.sharedMesh = null;
         data.col.sharedMesh = data.mesh;
-
     }
 
+    // è¾…åŠ©å‡½æ•°ï¼šåˆ¤æ–­ä¸€å †ç‚¹æ˜¯ä¸æ˜¯åœ¨ä¸€æ¡ç›´çº¿ä¸Š (ç”¨äºæ£€æµ‹"æ™¾è¡£çº¿")
+    bool IsCollinear(List<Vector3> points)
+    {
+        if (points.Count < 3) return true;
+        Vector3 start = points[0];
+        Vector3 end = points[points.Count - 1];
+        Vector3 lineDir = (end - start).normalized;
+
+        for (int i = 1; i < points.Count - 1; i++)
+        {
+            Vector3 currentDir = (points[i] - start).normalized;
+            // å‰ä¹˜ç»“æœæ¥è¿‘0è¯´æ˜å…±çº¿
+            if (Vector3.Cross(lineDir, currentDir).sqrMagnitude > 0.01f)
+                return false;
+        }
+        return true;
+    }
+
+
     /// <summary>
-    /// °ÑÒ»¸ö¶à±ßĞÎ ÇĞ·Ö³ÉÈı½ÇĞÎ
+    /// æ™ºèƒ½å‡¸åŒ…ç®—æ³•ï¼šè‡ªåŠ¨è®¡ç®—æŠ•å½±å¹³é¢ï¼Œè§£å†³ Plane æ—‹è½¬å¯¼è‡´å½±å­å˜æˆä¸€æ¡çº¿çš„é—®é¢˜
+    /// </summary>
+    List<Vector3> GetConvexHull(List<Vector3> points)
+    {
+        if (points.Count < 3) return points;
+
+        // 1. è®¡ç®—ä¸­å¿ƒç‚¹
+        Vector3 center = Vector3.zero;
+        foreach (var p in points) center += p;
+        center /= points.Count;
+
+        // 2. è®¡ç®—æ³•çº¿ (è¿™ä¸€æ­¥æ˜¯æ ¸å¿ƒï¼šè‡ªåŠ¨åˆ¤æ–­å½±å­èººåœ¨å“ªä¸ªå¹³é¢ä¸Š)
+        Vector3 normal = Vector3.forward;
+        bool normalFound = false;
+
+        // éå†ç‚¹ï¼Œåˆ©ç”¨å‰ä¹˜æ‰¾åˆ°å‚ç›´äºå½±å­çš„æ–¹å‘
+        for (int i = 0; i < points.Count - 2; i++)
+        {
+            Vector3 v1 = (points[i] - center).normalized;
+            Vector3 v2 = (points[i + 1] - center).normalized;
+            Vector3 n = Vector3.Cross(v1, v2);
+            // åªè¦å‘é‡é•¿åº¦è¶³å¤Ÿï¼Œè¯´æ˜æ‰¾åˆ°äº†è¯¥å¹³é¢çš„æœå‘
+            if (n.sqrMagnitude > 0.001f)
+            {
+                normal = n.normalized;
+                normalFound = true;
+                break;
+            }
+        }
+
+        // å¦‚æœæ‰¾ä¸åˆ°æ³•çº¿ï¼Œè¯´æ˜æ‰€æœ‰ç‚¹çœŸçš„å…±çº¿(æ™¾è¡£çº¿)ï¼Œç›´æ¥è¿”å›äº¤ç»™ CalculateSingleShadow é‡Œçš„å¢è‚¥é€»è¾‘å¤„ç†
+        if (!normalFound) return points;
+
+        // 3. æ„å»ºæ—‹è½¬ï¼šè®¡ç®—æŠŠ"å½“å‰å½±å­çš„é¢"æ—‹è½¬åˆ°"æ­£å¯¹å±å¹•(XYå¹³é¢)"éœ€è¦çš„æ—‹è½¬é‡
+        // è¿™æ ·æˆ‘ä»¬å°±å¯ä»¥å¿½ç•¥ Z è½´ï¼Œèˆ’æœåœ°è¿›è¡Œ 2D æ’åºäº†
+        Quaternion rotateToFlat = Quaternion.FromToRotation(normal, Vector3.back);
+        Quaternion rotateBack = Quaternion.Inverse(rotateToFlat);
+
+        // 4. æŠ•å½±å¹¶æ’åº
+        List<Vector3> sortedPoints = new List<Vector3>();
+        foreach (var p in points)
+        {
+            // å…³é”®ä¿®æ­£ï¼šä¸å†è½¬åˆ°ç‰©ä½“(Transform)å±€éƒ¨åæ ‡ï¼Œè€Œæ˜¯æ ¹æ®å¢™é¢æ³•çº¿è½¬å¹³
+            sortedPoints.Add(rotateToFlat * (p - center));
+        }
+
+        // æ’åºï¼šç°åœ¨ Z è½´å·²ç»æ˜¯ 0 äº†ï¼Œæ”¾å¿ƒæ¯”è¾ƒ X å’Œ Y
+        sortedPoints.Sort((a, b) =>
+        {
+            if (Mathf.Abs(a.x - b.x) < 0.001f) return a.y.CompareTo(b.y);
+            return a.x.CompareTo(b.x);
+        });
+
+        // 5. å•è°ƒé“¾ç®—æ³• (æ ‡å‡†çš„ 2D å‡¸åŒ…è®¡ç®—)
+        List<Vector3> hull = new List<Vector3>();
+        // è¾…åŠ©å‡½æ•°ï¼šè®¡ç®— 2D å‰ä¹˜
+        float Cross(Vector3 a, Vector3 b, Vector3 o)
+        {
+            return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+        }
+
+        // ä¸‹åŠé“¾
+        for (int i = 0; i < sortedPoints.Count; i++)
+        {
+            while (hull.Count >= 2 && Cross(hull[hull.Count - 2], hull[hull.Count - 1], sortedPoints[i]) <= 0)
+            {
+                hull.RemoveAt(hull.Count - 1);
+            }
+            hull.Add(sortedPoints[i]);
+        }
+
+        // ä¸ŠåŠé“¾
+        int lowerCount = hull.Count;
+        for (int i = sortedPoints.Count - 2; i >= 0; i--)
+        {
+            while (hull.Count > lowerCount && Cross(hull[hull.Count - 2], hull[hull.Count - 1], sortedPoints[i]) <= 0)
+            {
+                hull.RemoveAt(hull.Count - 1);
+            }
+            hull.Add(sortedPoints[i]);
+        }
+
+        if (hull.Count > 1) hull.RemoveAt(hull.Count - 1);
+
+        // 6. è¿˜åŸå›ä¸–ç•Œåæ ‡
+        List<Vector3> result = new List<Vector3>();
+        foreach (var p in hull)
+        {
+            // è½¬å›å» + ç§»å›åŸä½
+            result.Add((rotateBack * p) + center);
+        }
+
+        return result;
+    }
+
+
+    /// <summary>
+    /// æŠŠä¸€ä¸ªå¤šè¾¹å½¢ åˆ‡åˆ†æˆä¸‰è§’å½¢
     /// </summary>
     /// <param name="vertexCount"></param>
     /// <param name="offext"></param>
@@ -269,12 +432,12 @@ public class ShadowPlatformObject : MonoBehaviour
         List<int> triangles = new List<int>();
         if (vertexCount < 3) return triangles.ToArray();
 
-        //ÉÈĞÎÇĞ·Ö·¢  ¹Ì¶¨µÚÒ»¸öµã Ò»´ÎÁ¬½ÓºóÃæµÄµã
+        //æ‰‡å½¢åˆ‡åˆ†å‘  å›ºå®šç¬¬ä¸€ä¸ªç‚¹ ä¸€æ¬¡è¿æ¥åé¢çš„ç‚¹
         for (int i = 1; i < vertexCount - 1; i++)
         {
-            triangles.Add(offext);//ÖĞĞÄµã
-            triangles.Add(offext + i);//µ±Ç°µã
-            triangles.Add(offext + i + 1);//ÏÂÒ»¸öµã
+            triangles.Add(offext);//ä¸­å¿ƒç‚¹
+            triangles.Add(offext + i);//å½“å‰ç‚¹
+            triangles.Add(offext + i + 1);//ä¸‹ä¸€ä¸ªç‚¹
 
         }
         return triangles.ToArray();
