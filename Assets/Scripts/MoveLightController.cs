@@ -7,6 +7,7 @@ public class MoveLightController : MonoBehaviour
     public float speed = 5;
     public Vector3 initialLocalPos;//位置初始记录，记录的是 局部坐标
     public Vector2 MaxOffestDis;//灯光的最大偏移量
+
     private void Start()
     {
         initialLocalPos = transform.localPosition;
@@ -35,6 +36,7 @@ public class MoveLightController : MonoBehaviour
             initialLocalPos.y + MaxOffestDis.y);
 
         transform.localPosition = new Vector3(clampedX, clampedY, initialLocalPos.z);
+
         //transform.position = Vector3.Lerp(transform.position, target, speed);
     }
 }

@@ -61,7 +61,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 0.6921871, b: 0.33773577, a: 1}
-    - _PlayerPosition: {r: 0.45619133, g: 0.4851039, b: 33.367092, a: 0}
+    - _PlayerPosition: {r: 0.5320396, g: 0.49897167, b: 33.323627, a: 0}
     - _Tint: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &6452085136056704495
