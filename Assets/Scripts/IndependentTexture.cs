@@ -10,12 +10,12 @@ public class IndependentTexture : MonoBehaviour
     [Header("ÍÏÈëÎÆÀí")]
     public Texture2D mainTexture;
     [ColorUsage(true, true)]
-    public Color tint = Color.grey;
+    public Color tint = Color.white;
     public float size = 1.0f;
     [Range(0f, 1f)]
     public float smoothness = 0.5f;
     [Range(0f, 1f)]
-    public float opacity = 0.5f;
+    public float opacity = 1f;
     public float Alpha = 0f;
 
 

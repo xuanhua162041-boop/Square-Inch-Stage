@@ -5,6 +5,8 @@ using System.Collections.Generic;
 [DefaultExecutionOrder(-100)]
 public class ShadowCasterMesh : MonoBehaviour
 {
+
+
     [Header("核心设置")]
     public Transform wallTransform;
     public string lightTag = "ShadowLight";
@@ -18,6 +20,7 @@ public class ShadowCasterMesh : MonoBehaviour
     public float shadowThickness = 1.5f;
     public float bias = 0.03f;
     public PhysicMaterial physicsMaterial;
+
 
     // --- 内部数据 ---
     private class ShadowInstance
