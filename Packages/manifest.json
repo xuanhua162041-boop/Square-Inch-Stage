@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.soungproduct.soungfxshaders": "https://gitee.com/soung2279/SoungFXShaders.git",
     "com.unity.2d.animation": "9.1.3",
     "com.unity.2d.psdimporter": "8.0.5",
     "com.unity.cinemachine": "2.10.5",
