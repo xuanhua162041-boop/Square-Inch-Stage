@@ -2,52 +2,50 @@
 using UnityEngine.Rendering;
 using System.Collections.Generic;
 
-[DefaultExecutionOrder(-100)]
-public class ShadowCasterMesh : MonoBehaviour
+[DefaultExecutionOrder(-100)] // 保持在脚本执行顺序的最前面，确保物理计算前 Mesh 已更新
+public class ShadowGroupCaster : MonoBehaviour
 {
-
-
     [Header("核心设置")]
     public Transform wallTransform;
     public string lightTag = "ShadowLight";
 
     [Header("调试开关")]
-    [Tooltip("勾选它：显示绿色的影子块（方便你调试位置）。\n取消勾选：影子块隐形（游戏正式运行时用，只留碰撞）。")]
     public bool showDebugVisuals = true;
 
     [Header("物理设置")]
-    [Tooltip("影子厚度 (建议 1.5)")]
     public float shadowThickness = 1.5f;
     public float bias = 0.03f;
-    public PhysicMaterial physicsMaterial;
+    public PhysicMaterial physicsMaterial; // 务必在 Inspector 赋值一个高摩擦力的材质
 
+    // --- 内部数据结构 ---
+    private class SubMeshInfo
+    {
+        public Transform meshTrans;
+        public Vector3[] srcVertices;
+        public int[] srcTriangles;
+        public int srcVertCount;
+        public int srcTriCount;
+    }
 
-    // --- 内部数据 ---
     private class ShadowInstance
     {
         public Transform lightTrans;
-        public GameObject obj;
+        public SubMeshInfo subMesh;
+        public GameObject shadowObj;
+        public Mesh mesh;
         public MeshFilter mf;
         public MeshRenderer mr;
         public MeshCollider mc;
-        public Mesh mesh;
     }
 
+    private List<SubMeshInfo> _subMeshes = new List<SubMeshInfo>();
     private List<ShadowInstance> _shadows = new List<ShadowInstance>();
-
-    private Vector3[] _srcVertices;
-    private int[] _srcTriangles;
-    private int _srcVertCount;
-    private int _srcTriCount;
-
-    // 用于调试的材质 (代码自动生成一个绿色的)
     private Material _debugMaterial;
 
     void Start()
     {
-        // 自动创建调试材质
         _debugMaterial = new Material(Shader.Find("Sprites/Default"));
-        _debugMaterial.color = new Color(0, 1, 0, 0.5f); // 半透明绿色
+        _debugMaterial.color = new Color(0, 1, 0, 0.5f);
 
         if (wallTransform == null)
         {
@@ -56,69 +54,94 @@ public class ShadowCasterMesh : MonoBehaviour
             else { this.enabled = false; return; }
         }
 
-        MeshFilter srcMf = GetComponent<MeshFilter>();
-        if (srcMf == null) { this.enabled = false; return; }
+        // 1. 搜集 Mesh 信息
+        MeshFilter[] childMfs = GetComponentsInChildren<MeshFilter>();
+        foreach (var mf in childMfs)
+        {
+            if (mf.transform == this.transform) continue;
 
-        _srcVertices = srcMf.sharedMesh.vertices;
-        _srcTriangles = srcMf.sharedMesh.triangles;
-        _srcVertCount = _srcVertices.Length;
-        _srcTriCount = _srcTriangles.Length;
+            SubMeshInfo info = new SubMeshInfo();
+            info.meshTrans = mf.transform;
+            info.srcVertices = mf.sharedMesh.vertices;
+            info.srcTriangles = mf.sharedMesh.triangles;
+            info.srcVertCount = info.srcVertices.Length;
+            info.srcTriCount = info.srcTriangles.Length;
+            _subMeshes.Add(info);
+        }
 
+        // 2. 创建影子实例
         GameObject[] lights = GameObject.FindGameObjectsWithTag(lightTag);
-        foreach (var l in lights) CreateShadowInstance(l.transform);
+        foreach (var l in lights)
+        {
+            foreach (var sm in _subMeshes)
+            {
+                CreateShadowInstance(l.transform, sm);
+            }
+        }
     }
 
-    void CreateShadowInstance(Transform lightSource)
+    void CreateShadowInstance(Transform lightSource, SubMeshInfo sm)
     {
         ShadowInstance instance = new ShadowInstance();
         instance.lightTrans = lightSource;
+        instance.subMesh = sm;
 
-        GameObject go = new GameObject($"ShadowCollider_{lightSource.name}");
+        GameObject go = new GameObject($"Shadow_{lightSource.name}_{sm.meshTrans.name}");
         go.transform.SetParent(transform);
-        go.transform.localPosition = Vector3.zero;
-        go.transform.localRotation = Quaternion.identity;
 
-        int layer = LayerMask.NameToLayer("Shadow");
+        int layer = LayerMask.NameToLayer("Shadow"); // 确保你有这个 Layer
         if (layer != -1) go.layer = layer;
 
         instance.mf = go.AddComponent<MeshFilter>();
         instance.mr = go.AddComponent<MeshRenderer>();
         instance.mc = go.AddComponent<MeshCollider>();
 
-        // 1. 物理：强制开启凸包 (配合 Blender 拆分)
-        instance.mc.convex = true;
-        instance.mc.cookingOptions = MeshColliderCookingOptions.CookForFasterSimulation |
-                                     MeshColliderCookingOptions.EnableMeshCleaning |
-                                     MeshColliderCookingOptions.WeldColocatedVertices;
+        // 【修改点 1】关闭 Convex。
+        // 对于复杂的皮影轮廓，Convex 会填平凹陷，导致角色看似踩空或被挤出。
+        // 只有当你的角色也使用 MeshCollider 时才必须开启 Convex，
+        // 如果角色是 Capsule/Box Collider，这里设为 false 更精准。
+        instance.mc.convex = false;
+
         if (physicsMaterial != null) instance.mc.material = physicsMaterial;
 
-        // 2. 视觉：根据开关决定是否显示
         instance.mr.material = _debugMaterial;
-        instance.mr.enabled = showDebugVisuals; // <--- 关键：这里控制是否隐形
+        instance.mr.enabled = showDebugVisuals;
         instance.mr.shadowCastingMode = ShadowCastingMode.Off;
         instance.mr.receiveShadows = false;
 
         instance.mesh = new Mesh();
         instance.mesh.name = "ShadowHitbox";
-        instance.mesh.MarkDynamic();
+        instance.mesh.MarkDynamic(); // 标记为动态，优化频繁更新的性能
 
         instance.mf.mesh = instance.mesh;
-        instance.obj = go;
+        instance.shadowObj = go;
         _shadows.Add(instance);
     }
 
     void FixedUpdate()
     {
         if (wallTransform == null) return;
+
+        bool hasUpdated = false;
+
         foreach (var instance in _shadows)
         {
-            if (instance.lightTrans != null)
+            if (instance.lightTrans != null && instance.subMesh.meshTrans != null)
             {
                 UpdateSingleShadow(instance);
-                // 实时更新可见性
                 if (instance.mr.enabled != showDebugVisuals)
                     instance.mr.enabled = showDebugVisuals;
+
+                hasUpdated = true;
             }
+        }
+
+        // 【修改点 2】强制物理同步
+        // 在修改了 MeshCollider 的 sharedMesh 后，必须调用此方法
+        // 否则物理引擎要等到下一帧才会刷新碰撞体，导致高速运动的角色穿过影子
+        if (hasUpdated)
+        {
+            Physics.SyncTransforms();
         }
     }
 
@@ -128,13 +151,15 @@ public class ShadowCasterMesh : MonoBehaviour
         Vector3 planePoint = wallTransform.position;
         Vector3 planeNormal = wallTransform.up;
 
-        Vector3[] newVerts = new Vector3[_srcVertCount * 2];
-        Matrix4x4 localToWorld = transform.localToWorldMatrix;
-        Matrix4x4 worldToShadowLocal = instance.obj.transform.worldToLocalMatrix;
+        var sm = instance.subMesh;
+        Vector3[] newVerts = new Vector3[sm.srcVertCount * 2];
 
-        for (int i = 0; i < _srcVertCount; i++)
+        Matrix4x4 localToWorld = sm.meshTrans.localToWorldMatrix;
+        Matrix4x4 worldToShadowLocal = instance.shadowObj.transform.worldToLocalMatrix;
+
+        for (int i = 0; i < sm.srcVertCount; i++)
         {
-            Vector3 worldVert = localToWorld.MultiplyPoint3x4(_srcVertices[i]);
+            Vector3 worldVert = localToWorld.MultiplyPoint3x4(sm.srcVertices[i]);
             Vector3 rayDir = (worldVert - lightPos).normalized;
 
             float denom = Vector3.Dot(planeNormal, rayDir);
@@ -148,32 +173,35 @@ public class ShadowCasterMesh : MonoBehaviour
             Vector3 localNormal = worldToShadowLocal.MultiplyVector(planeNormal).normalized;
 
             newVerts[i] = localHitPoint;
-            newVerts[i + _srcVertCount] = localHitPoint + localNormal * shadowThickness;
+            newVerts[i + sm.srcVertCount] = localHitPoint + localNormal * shadowThickness;
         }
 
-        // 依然构建三角形，因为 MeshCollider 需要它来计算形状
+        // 构建三角形逻辑不变
         List<int> tris = new List<int>();
-        for (int i = 0; i < _srcTriCount; i += 3)
+        for (int i = 0; i < sm.srcTriCount; i += 3)
         {
-            tris.Add(_srcTriangles[i]); tris.Add(_srcTriangles[i + 1]); tris.Add(_srcTriangles[i + 2]);
+            tris.Add(sm.srcTriangles[i]); tris.Add(sm.srcTriangles[i + 1]); tris.Add(sm.srcTriangles[i + 2]);
         }
-        for (int i = 0; i < _srcTriCount; i += 3)
+        for (int i = 0; i < sm.srcTriCount; i += 3)
         {
-            int off = _srcVertCount;
-            tris.Add(_srcTriangles[i + 2] + off); tris.Add(_srcTriangles[i + 1] + off); tris.Add(_srcTriangles[i] + off);
+            int off = sm.srcVertCount;
+            tris.Add(sm.srcTriangles[i + 2] + off); tris.Add(sm.srcTriangles[i + 1] + off); tris.Add(sm.srcTriangles[i] + off);
         }
-        for (int i = 0; i < _srcTriCount; i += 3)
+        for (int i = 0; i < sm.srcTriCount; i += 3)
         {
-            AddSideQuad(tris, _srcTriangles[i], _srcTriangles[i + 1], _srcVertCount);
-            AddSideQuad(tris, _srcTriangles[i + 1], _srcTriangles[i + 2], _srcVertCount);
-            AddSideQuad(tris, _srcTriangles[i + 2], _srcTriangles[i], _srcVertCount);
+            AddSideQuad(tris, sm.srcTriangles[i], sm.srcTriangles[i + 1], sm.srcVertCount);
+            AddSideQuad(tris, sm.srcTriangles[i + 1], sm.srcTriangles[i + 2], sm.srcVertCount);
+            AddSideQuad(tris, sm.srcTriangles[i + 2], sm.srcTriangles[i], sm.srcVertCount);
         }
 
         instance.mesh.Clear();
         instance.mesh.vertices = newVerts;
         instance.mesh.SetTriangles(tris, 0);
         instance.mesh.RecalculateNormals();
-        instance.mesh.RecalculateBounds();
+        instance.mesh.RecalculateBounds(); // 确保包围盒正确
+
+        // 重新赋值 MeshCollider
+        instance.mc.sharedMesh = null; // 先清空，确保 dirty flag 被触发
         instance.mc.sharedMesh = instance.mesh;
     }
 
