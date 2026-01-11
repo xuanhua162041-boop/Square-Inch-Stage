@@ -8,17 +8,21 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Shadow
-  m_Shader: {fileID: 4800000, guid: 650dd9526735d5b46b79224bc6e94025, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0152da81298afac40a4c2a9fe6df7a51, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_ValidKeywords:
+  - _LIUGUANGTEXUVMODE_SCREEN
+  - _PROMASKDIR_LEFT
+  - _SOFT_PARTICLES_ON
+  m_InvalidKeywords:
+  - _ISALPHA_ON
+  - _SOFT_PARTICLES_ON_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
-  m_CustomRenderQueue: 1992
-  stringTagMap:
-    RenderType: Opaque
+  m_CustomRenderQueue: 2450
+  stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -44,18 +48,46 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DissolveTex:
+        m_Texture: {fileID: 2800000, guid: 6db9da08bcd34af4e87f72de71b8f626, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DissolveTexPlus:
+        m_Texture: {fileID: 2800000, guid: 6456a8134f897de44a593d2ba7e79459, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _GamTex:
+        m_Texture: {fileID: 2800000, guid: 1cb21d94a2005634682bf38f7e47b3e2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LiuguangTex:
+        m_Texture: {fileID: 2800000, guid: 92cb9d5e542f83b47b4290ee65fd9a70, type: 3}
+        m_Scale: {x: 0.5, y: 0.5}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 63f10baffad44cd4aaf5f0fad791d5c6, type: 3}
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 2800000, guid: e8b3a5267beb2514c9dfe959f29355f3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTexPlus:
+        m_Texture: {fileID: 2800000, guid: e8b3a5267beb2514c9dfe959f29355f3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 55a7c29b8ac3451418a2de55fd956a3f, type: 3}
+        m_Scale: {x: 0.07, y: 0.25}
+        m_Offset: {x: 3.23, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -66,6 +98,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _VertexTex:
+        m_Texture: {fileID: 2800000, guid: e8b3a5267beb2514c9dfe959f29355f3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -85,42 +121,137 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
+    - _BlendMode: 10
     - _BlendModePreserveSpecular: 1
     - _BlendOp: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 0
+    - _CullingMode: 1
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
+    - _DissolveColorMode: 0
+    - _DissolveEdgeSwitch: 1
+    - _DissolveEdgeWide: 0.15
+    - _DissolveMode: 0
+    - _DissolvePower: 0.75
+    - _DissolveSmooth: 0.13
+    - _DissolveTexP: 1
+    - _DissolveTexPlusClamp: 1
+    - _DissolveTexPlusFlowMode: 1
+    - _DissolveTexPlusP: 0
+    - _DissolveTexPlusPower: 4.67
+    - _DissolveTexPlusRotator: 0
+    - _DissolveTexPlusSwitch: 0
+    - _DissolveTexPlusUsePro: 0
+    - _DissolveTexPlusUspeed: 0
+    - _DissolveTexPlusVspeed: 0
+    - _DissolveTexRotator: 0
+    - _DissolveTexSwitch: 0
+    - _DissolveTexUspeed: 0
+    - _DissolveTexVspeed: 0
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
+    - _FresnelAlphaMode: 1
+    - _FresnelColorMode: 0
+    - _FresnelMode: 1
+    - _FresnelSwitch: 0
+    - _GamAlphaMode: 0
+    - _GamTexClamp: 1
+    - _GamTexDesaturate: 0.61
+    - _GamTexFollowMainTex: 1
+    - _GamTexP: 0
+    - _GamTexRotator: 193
+    - _GamTexSwitch: 0
+    - _GamTexUspeed: 0
+    - _GamTexVspeed: 0
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _LiuguangSwitch: 0
+    - _LiuguangTexP: 0
+    - _LiuguangTexRotator: 0
+    - _LiuguangTexUVmode: 2
+    - _LiuguangUSpeed: 0
+    - _LiuguangVSpeed: -0.05
+    - _MainTexClamp: 1
+    - _MainTexFlowMode: 0
+    - _MainTexHue: 0
+    - _MainTexP: 0
+    - _MainTexPolarDistortionPower: 0
+    - _MainTexPolarDistortionUVScale: 1
+    - _MainTexRotator: 0
+    - _MainTexSaturation: 0.62
+    - _MainTexUVMode: 0
+    - _MainTexUspeed: 0
+    - _MainTexVspeed: 0
+    - _MaskPlusUsePro: 0
+    - _MaskSwitch: 0
+    - _MaskTexClamp: 0
+    - _MaskTexFlowMode: 0
+    - _MaskTexP: 0
+    - _MaskTexPlusClamp: 1
+    - _MaskTexPlusP: 0
+    - _MaskTexPlusRotator: 82
+    - _MaskTexPlusSwitch: 0
+    - _MaskTexPlusUspeed: 0
+    - _MaskTexPlusVspeed: 0
+    - _MaskTexRotator: 14
+    - _MaskTexUspeed: 0
+    - _MaskTexVspeed: 0
     - _Metallic: 0
     - _Mode: 0
+    - _NoisePower: 1
+    - _NoiseSwitch: 0
+    - _NoiseTexP: 0
+    - _NoiseTexUspeed: 7.96
+    - _NoiseTexVspeed: 7.51
     - _OcclusionStrength: 1
+    - _OneMinusMask: 0
     - _Parallax: 0.005
+    - _ProMaskDir: 2
+    - _ProMaskRange: 1
+    - _ProMaskSwitch: 1
     - _QueueOffset: -8
     - _ReceiveShadows: 0
+    - _SOFT_PARTICLES_ON: 0
     - _SampleGI: 0
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
+    - _SoftParticle: 1.2
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _UVSec: 0
+    - _UseLGTexColor: 0
+    - _VertexMode: 0
+    - _VertexPower: 0.7
+    - _VertexSwitch: 0
+    - _VertexTexRotator: 192
+    - _VertexTexUspeed: 0.1
+    - _VertexTexVspeed: 0.1
     - _WorkflowMode: 1
+    - _ZTestMode: 4
     - _ZWrite: 1
+    - _Zwrite: 1
     m_Colors:
     - _BaseColor: {r: 0.17735851, g: 0.1336192, b: 0.11611962, a: 1}
     - _Color: {r: 0.17735848, g: 0.13361916, b: 0.1161196, a: 1}
+    - _DissolveEdgeColor: {r: 1, g: 0.41176474, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FresnelColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FresnelSet: {r: 0, g: 0, b: 0, a: 0}
+    - _LiuguangColor: {r: 0, g: 0, b: 0, a: 1}
+    - _LiuguangPolarScale: {r: 0.5, g: 0.5, b: 1, a: 1}
+    - _LiuguangScreenTilingOffset: {r: 1, g: 1, b: 0, a: 0}
+    - _MainColor: {r: 0.15292618, g: 0.057805434, b: 0.009134057, a: 1}
+    - _MainTexPolarSets: {r: 0.5, g: 0.5, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _VertexTexDir: {r: 2, g: 2, b: 2, a: 1.61}
   m_BuildTextureStacks: []
 --- !u!114 &3773763339055064630
 MonoBehaviour:

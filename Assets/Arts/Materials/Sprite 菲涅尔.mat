@@ -205,7 +205,7 @@ Material:
     - _EnableSoftParticles: 1
     - _EnvironmentReflections: 1
     - _Exposure: 1.8
-    - _FresnelAlphaMode: 1
+    - _FresnelAlphaMode: 0
     - _FresnelColorMode: 0
     - _FresnelMode: 1
     - _FresnelSwitch: 1
@@ -345,14 +345,14 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EnhancedColor: {r: 1, g: 1, b: 1, a: 1}
     - _FlashColor: {r: 1, g: 1, b: 1, a: 0}
-    - _FresnelColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
+    - _FresnelColor: {r: 0.7660377, g: 0.7660377, b: 0.7660377, a: 1}
     - _FresnelSet: {r: 3.32, g: -0.12, b: -1.73, a: 0.31}
     - _GlobalPolarCenter: {r: 0.5, g: 0.5, b: 1, a: 1}
     - _HeatPolarSettings: {r: 0.5, g: 0.5, b: 1, a: 1}
     - _LiuguangColor: {r: 0.0078125, g: 0.0078125, b: 0.0078125, a: 1}
     - _LiuguangPolarScale: {r: 0.5, g: 0.5, b: 1, a: 1}
     - _LiuguangScreenTilingOffset: {r: 1, g: 1, b: 0, a: 0}
-    - _MainColor: {r: 1.8037735, g: 1.8037735, b: 1.8037735, a: 0.49411765}
+    - _MainColor: {r: 3.6075475, g: 3.6075475, b: 3.6075475, a: 0.49411765}
     - _MainTexPolarSets: {r: 0.5, g: 0.5, b: 1, a: 1}
     - _MaskTexOffset: {r: 1, g: 1, b: 0, a: 0}
     - _ScreenPolarSettings: {r: 0.5, g: 0.5, b: 1, a: 1}
