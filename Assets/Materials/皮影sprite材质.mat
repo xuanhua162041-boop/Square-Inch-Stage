@@ -58,20 +58,21 @@ Material:
     - _ClearCoatSmoothness: 0.1
     - _Cull: 0
     - _DetailNormalMapScale: 0
+    - _DstBlend: 0
     - _DstBlendAlpha: 1
     - _Glossiness: 1
     - _Metallic: 0.1
     - _Parallax: 0.005
     - _QueueOffset: -3
     - _ReceiveShadows: 0
-    - _Smoothness: 0.784
+    - _Smoothness: 0.671
     - _SrcBlend: 2
     - _SrcBlendAlpha: 0
     - _Surface: 1
     - _WorkflowMode: 0
     - _ZWrite: 0
     m_Colors:
-    - _EmissionColor: {r: 0.8415094, g: 0.73508656, b: 0.5954076, a: 1}
+    - _EmissionColor: {r: 2.380148, g: 2.0791388, b: 1.684067, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &5182169164800811993
 MonoBehaviour:

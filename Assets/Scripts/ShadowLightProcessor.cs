@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(Light))]
 [DefaultExecutionOrder(-100)]
+[ExecuteAlways] // 1. 核心修改：允许在编辑模式下运行
 public class ShadowLightProcessor : MonoBehaviour
 {
     [Header("环境设置")]
@@ -12,7 +13,7 @@ public class ShadowLightProcessor : MonoBehaviour
     [Header("物理参数")]
     public float shadowThickness = 1.5f;
     public float bias = 0.03f;
-    [Range(0f, 5f)] public float rangeBuffer = 2.0f; // 稍微调大一点容错
+    [Range(0f, 5f)] public float rangeBuffer = 2.0f;
     public PhysicMaterial shadowPhysicsMat;
 
     [Header("调试")]
@@ -26,7 +27,7 @@ public class ShadowLightProcessor : MonoBehaviour
         public MeshFilter mf;
         public MeshCollider mc;
         public MeshRenderer mr;
-        public bool isActive; // 本帧是否应该保持活跃
+        public bool isActive;
     }
 
     private Dictionary<Transform, ShadowInstance> _shadowInstanceMap = new Dictionary<Transform, ShadowInstance>();
@@ -40,20 +41,47 @@ public class ShadowLightProcessor : MonoBehaviour
 
     void Start()
     {
+        InitData();
+    }
+
+    // 2. 初始化逻辑提取，防止编辑模式下组件丢失
+    void InitData()
+    {
         _light = GetComponent<Light>();
         _shadowLayer = LayerMask.NameToLayer("Shadow");
         if (_shadowLayer == -1) _shadowLayer = 0;
 
         if (debugMaterial == null)
         {
+            // 注意：编辑模式下频繁 new Material 可能会导致内存泄漏，但在简单调试下通常无碍
+            // 建议将 debugMaterial 做成 Asset 拖进去
             debugMaterial = new Material(Shader.Find("Sprites/Default"));
             debugMaterial.color = new Color(0, 0, 0, 0.5f);
         }
     }
 
+    // 3. 编辑模式下使用 Update 驱动，Play 模式下保持 FixedUpdate
+    void Update()
+    {
+        if (!Application.isPlaying)
+        {
+            ProcessShadowLogic();
+        }
+    }
+
     void FixedUpdate()
     {
+        if (Application.isPlaying)
+        {
+            ProcessShadowLogic();
+        }
+    }
+
+    // 4. 将核心逻辑封装，供 Update 和 FixedUpdate 调用
+    void ProcessShadowLogic()
+    {
         if (wallTransform == null) return;
+        if (_light == null) InitData(); // 编辑模式下的防御性检查
 
         Vector3 lightPos = transform.position;
         float lightRange = _light.range + rangeBuffer;
@@ -68,40 +96,40 @@ public class ShadowLightProcessor : MonoBehaviour
         }
 
         // 2. 遍历所有注册物体
-        for (int i = 0; i < ShadowCasterGroup.AllGroups.Count; i++)
+        // 【注意】如果 ShadowCasterGroup 没有加 [ExecuteAlways]，这里在编辑模式下可能为空
+        if (ShadowCasterGroup.AllGroups != null)
         {
-            var group = ShadowCasterGroup.AllGroups[i];
-            if (group == null) continue;
-
-            foreach (var item in group.Casters)
+            for (int i = 0; i < ShadowCasterGroup.AllGroups.Count; i++)
             {
-                // --- 逻辑修改核心区域 Start ---
+                var group = ShadowCasterGroup.AllGroups[i];
+                if (group == null) continue;
 
-                // 条件A: 物体本身在灯光范围内
-                bool inLightRange = IsInRange(item, lightPos, lightDir, lightRange, spotAngle);
-
-                // 条件B: 影子目前正在被摄像机看见
-                bool isVisibleOnScreen = false;
-                ShadowInstance existingInstance;
-                if (_shadowInstanceMap.TryGetValue(item.transform, out existingInstance))
+                foreach (var item in group.Casters)
                 {
-                    // Renderer.isVisible 只有在 Scene视图或Game视图 中被看见时才为 true
-                    // 注意：这要求影子物体本身必须是 Active 的才能检测
-                    if (existingInstance.go.activeSelf && existingInstance.mr.isVisible)
+                    bool inLightRange = IsInRange(item, lightPos, lightDir, lightRange, spotAngle);
+
+                    bool isVisibleOnScreen = false;
+                    ShadowInstance existingInstance;
+
+                    // 编辑模式下 Renderer.isVisible 的行为可能和 Game 视图不同，
+                    // 这里为了编辑器调试方便，只要 activeSelf 为 true 就视为可见，或者保留原有逻辑
+                    if (_shadowInstanceMap.TryGetValue(item.transform, out existingInstance))
                     {
-                        isVisibleOnScreen = true;
+                        if (existingInstance.go != null && existingInstance.go.activeSelf)
+                        {
+                            // 在编辑器模式下，Scene 视图也算 Camera，所以 isVisible 通常有效
+                            if (existingInstance.mr.isVisible) isVisibleOnScreen = true;
+                            // 编辑模式下强制更新，方便拖拽查看效果
+                            if (!Application.isPlaying) isVisibleOnScreen = true;
+                        }
+                    }
+
+                    if (inLightRange || isVisibleOnScreen)
+                    {
+                        UpdateShadowFor(item, lightPos);
+                        hasAnyUpdate = true;
                     }
                 }
-
-                // 最终判定：只要满足其中一个条件，就必须更新！
-                // 解释：如果物体在范围内，当然要更；如果物体跑出去了，但影子还在屏幕上拖得很长，也要更，防止穿帮。
-                if (inLightRange || isVisibleOnScreen)
-                {
-                    UpdateShadowFor(item, lightPos);
-                    hasAnyUpdate = true;
-                }
-
-                // --- 逻辑修改核心区域 End ---
             }
         }
 
@@ -114,12 +142,11 @@ public class ShadowLightProcessor : MonoBehaviour
             {
                 if (keysToRemove == null) keysToRemove = new List<Transform>();
                 keysToRemove.Add(kvp.Key);
-                if (kvp.Value.go != null) Destroy(kvp.Value.go);
+                SafeDestroy(kvp.Value.go); // 使用安全销毁
                 continue;
             }
 
-            // 只有当 isActive 为 false (意味着既不在灯光范围，也不在屏幕内) 时，才关掉
-            if (!kvp.Value.isActive && kvp.Value.go.activeSelf)
+            if (!kvp.Value.isActive && kvp.Value.go != null && kvp.Value.go.activeSelf)
             {
                 kvp.Value.go.SetActive(false);
             }
@@ -130,25 +157,45 @@ public class ShadowLightProcessor : MonoBehaviour
             foreach (var k in keysToRemove) _shadowInstanceMap.Remove(k);
         }
 
-        // 4. 物理同步
-        if (hasAnyUpdate)
+        // 4. 物理同步 (编辑模式下不需要 SyncTransforms，否则可能导致编辑器卡顿)
+        if (hasAnyUpdate && Application.isPlaying)
         {
             Physics.SyncTransforms();
         }
     }
 
+    // 5. 编辑器清理逻辑：脚本禁用或销毁时，清理生成的临时影子，防止残留
+    void OnDisable()
+    {
+        foreach (var kvp in _shadowInstanceMap)
+        {
+            if (kvp.Value.go != null) SafeDestroy(kvp.Value.go);
+        }
+        _shadowInstanceMap.Clear();
+    }
+
+    // 6. 辅助函数：根据模式选择销毁方式
+    void SafeDestroy(Object obj)
+    {
+        if (obj == null) return;
+        if (Application.isPlaying)
+            Destroy(obj);
+        else
+            DestroyImmediate(obj);
+    }
+
     bool IsInRange(ShadowCasterGroup.CasterItem item, Vector3 lightPos, Vector3 lightDir, float range, float angle)
     {
+        if (item.transform == null) return false; // 防御性检查
         Vector3 itemPos = item.transform.position;
         float distSqr = (itemPos - lightPos).sqrMagnitude;
-        // 如果想要更激进的优化，这里可以用 range * range * 1.5f 之类的
         if (distSqr > range * range) return false;
 
         if (angle < 360f)
         {
             Vector3 dirToItem = (itemPos - lightPos).normalized;
             float angleToItem = Vector3.Angle(lightDir, dirToItem);
-            if (angleToItem > (angle * 0.5f) + 10f) return false; // 角度稍微给大点宽容度
+            if (angleToItem > (angle * 0.5f) + 10f) return false;
         }
         return true;
     }
@@ -156,22 +203,18 @@ public class ShadowLightProcessor : MonoBehaviour
     void UpdateShadowFor(ShadowCasterGroup.CasterItem item, Vector3 lightPos)
     {
         ShadowInstance instance;
-        if (!_shadowInstanceMap.TryGetValue(item.transform, out instance))
+        // 如果 Map 里有，但 GameObject 已经被手动删了（编辑器常见情况），需要重建
+        if (!_shadowInstanceMap.TryGetValue(item.transform, out instance) || instance.go == null)
         {
+            if (_shadowInstanceMap.ContainsKey(item.transform)) _shadowInstanceMap.Remove(item.transform);
+
             instance = CreateShadowInstance(item);
             _shadowInstanceMap.Add(item.transform, instance);
         }
 
-        // 标记为活跃，防止在第3步被关掉
         instance.isActive = true;
-
         if (!instance.go.activeSelf) instance.go.SetActive(true);
 
-        // ... 下面的投影数学计算代码保持完全不变 ...
-        // ... 直接使用你手里现有的 UpdateShadowFor 逻辑即可 ...
-        // ... 重点是上面的 isActive 判断逻辑 ...
-
-        // 为了方便你复制，我把数学部分简写在这里，请保留你之前完整的数学逻辑
         Vector3 planePoint = wallTransform.position;
         Vector3 planeNormal = wallTransform.up;
         Matrix4x4 localToWorld = item.transform.localToWorldMatrix;
@@ -240,11 +283,15 @@ public class ShadowLightProcessor : MonoBehaviour
 
     ShadowInstance CreateShadowInstance(ShadowCasterGroup.CasterItem item)
     {
-        // 保持不变
         ShadowInstance instance = new ShadowInstance();
         GameObject go = new GameObject($"Shadow_For_{item.transform.name}");
         go.transform.SetParent(this.transform);
         go.layer = _shadowLayer;
+
+        // 7. 核心修改：设置 HideFlags 防止生成的影子被保存到场景文件中
+        // DontSave: 不保存到 Scene
+        // NotEditable: 在 Inspector 中不可见（可选，为了调试你可以去掉这个）
+        go.hideFlags = HideFlags.DontSave;
 
         instance.go = go;
         instance.mf = go.AddComponent<MeshFilter>();
