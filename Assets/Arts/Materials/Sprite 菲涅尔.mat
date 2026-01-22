@@ -96,9 +96,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTexPlus:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: c47eb34f6efcda94bbb0243f87bbfab8, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Offset: {x: 0, y: 0.21}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -256,7 +256,7 @@ Material:
     - _MaskTexPlusClamp: 0
     - _MaskTexPlusP: 0
     - _MaskTexPlusRotator: 0
-    - _MaskTexPlusSwitch: 0
+    - _MaskTexPlusSwitch: 1
     - _MaskTexPlusUspeed: 0
     - _MaskTexPlusVspeed: 0
     - _MaskTexRotator: 0

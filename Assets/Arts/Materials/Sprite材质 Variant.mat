@@ -29,6 +29,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _MaskTexPlus:
+        m_Texture: {fileID: 2800000, guid: c47eb34f6efcda94bbb0243f87bbfab8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0.48}
     - _NoiseTex:
         m_Texture: {fileID: 2800000, guid: e8b3a5267beb2514c9dfe959f29355f3, type: 3}
         m_Scale: {x: 0.02, y: 0.02}
@@ -36,9 +40,15 @@ Material:
     m_Ints: []
     m_Floats:
     - _BlendMode: 10
+    - _FresnelAlphaMode: 0
+    - _FresnelColorMode: 0
+    - _FresnelMode: 0
+    - _FresnelSwitch: 0
     - _NoisePower: 0.284
     - _NoiseTexUspeed: 0
     - _NoiseTexVspeed: 0.01
     - _SoftParticle: 1.4
-    m_Colors: []
+    m_Colors:
+    - _FresnelSet: {r: 0.18, g: 1, b: 0.22, a: 38.65}
+    - _MainColor: {r: 2, g: 2, b: 2.052356, a: 1}
   m_BuildTextureStacks: []
