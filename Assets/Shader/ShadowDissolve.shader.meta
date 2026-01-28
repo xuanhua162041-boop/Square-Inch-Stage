@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 5f0be798ae166484999dee8edfa58ee7
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _EdgeMask: {fileID: 2800000, guid: f3c0a528a904e6043afe5b3d75289038, type: 3}
+  - _EdgeTex: {fileID: 2800000, guid: 47b81932f47ace1448339b843c8a8327, type: 3}
+  - _NoiseAddTex1: {fileID: 2800000, guid: e8b3a5267beb2514c9dfe959f29355f3, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

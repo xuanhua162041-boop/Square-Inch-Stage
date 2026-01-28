@@ -59,10 +59,11 @@ public class ShadowCasterGroup : MonoBehaviour
     private void InitializeGroup()
     {
         Casters.Clear();
-        MeshFilter[] mfs = GetComponentsInChildren<MeshFilter>(false); // false 表示不包括非活跃物体，看你需求
+        MeshFilter[] mfs = GetComponentsInChildren<MeshFilter>(true); // false 表示不包括非激活物体
 
         foreach (var mf in mfs)
         {
+            if (mf.gameObject.layer != LayerMask.NameToLayer("FrontWall")) continue;
             if (mf.sharedMesh == null) continue;
             // 排除自己，只加子物体
             if (mf.transform == this.transform && mfs.Length > 1) continue;

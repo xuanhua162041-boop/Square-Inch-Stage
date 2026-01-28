@@ -5028,7 +5028,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!135 &290443707
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5110,7 +5110,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.14441416, y: 1.71, z: -9.52}
-  m_LocalScale: {x: 28.45, y: 28.45, z: 28.45}
+  m_LocalScale: {x: 22.84, y: 22.84, z: 22.84}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -12395,7 +12395,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &705630136
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -12501,7 +12501,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!135 &743374979
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -56796,7 +56796,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &996523194
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -56880,7 +56880,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1158511220
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -56966,7 +56966,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &1216046376
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -57284,7 +57284,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &1288665133
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -57508,7 +57508,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!135 &1455497977
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -58959,7 +58959,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &1646695525
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -59243,7 +59243,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1729628137
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -59732,7 +59732,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1826650071
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -59818,7 +59818,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &1842504644
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("音效")]
+    public AudioClip runAudioClip;
+    public AudioClip jumpAudioClip;
+    public AudioClip landAudioClip;
+    [Space(10)]
     private Rigidbody rb;
     private Collider coll; // 建议用 CapsuleCollider
     private Animator anim;
@@ -17,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheck;
     public Transform deathCheck;
     public LayerMask Shadow;
-    // 【修改点1】增大检测半径，防止动态网格抖动导致检测丢失
     public float groundCheckRadius = 0.25f;
 
     public bool isGround, isJump, isDeath;
@@ -28,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool jumpPressed;
     int jumpCount;
+
 
     private void Start()
     {
@@ -89,23 +94,20 @@ public class PlayerMovement : MonoBehaviour
     {
         float horizontalMove = Input.GetAxisRaw("Horizontal");
 
-        // 【修改点3】防止“钻地”现象
-        // 直接修改 velocity.y 会覆盖物理引擎的“反推力”。
-        // 当我们在地面上，且没有跳跃时，不要强制锁定 y 轴速度，让物理引擎处理支撑。
-
+       
         Vector3 targetVelocity = new Vector3(horizontalMove * speed, rb.velocity.y, 0);
         rb.velocity = targetVelocity;
 
-        // 【修改点4】安全的翻转朝向
-        // 频繁翻转刚体的 Scale 可能会导致碰撞体重建从而穿模。
-        // 如果只是 visuals (Sprite) 翻转，建议只翻转子物体 SpriteRenderer。
-        // 如果必须翻转父物体，请确保翻转时没有和墙体发生重叠。
+     
         if (horizontalMove != 0)
         {
             // 简单的防抖动处理
             float direction = Mathf.Sign(horizontalMove);
             transform.localScale = new Vector3(direction * defaultXScale, 1, 1);
         }
+
+
+
     }
 
     void Jump()
@@ -122,13 +124,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (jumpPressed)
         {
+
+
+
             // 执行跳跃
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, 0); // 这里直接覆盖Y是可以的，因为是瞬间力
 
             // 只有落地状态下扣第一次，或者二段跳扣次数
             if (isGround || jumpCount > 0)
             {
-                jumpCount--;
+                jumpCount--; 
             }
 
             jumpPressed = false;
@@ -145,16 +150,19 @@ public class PlayerMovement : MonoBehaviour
         {
             anim.SetBool("jumping", true);
             anim.SetBool("falling", false);
+
         }
         else if (rb.velocity.y < -0.1f && !isGround)
         {
             anim.SetBool("jumping", false);
             anim.SetBool("falling", true);
+
         }
         else if (isGround)
         {
             anim.SetBool("jumping", false);
             anim.SetBool("falling", false);
+
         }
     }
 
@@ -174,5 +182,35 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
+    }
+
+    public enum SoundType
+    {
+        Run,
+        Jump,
+        Land
+    }
+
+    public void playerSoundSFX(SoundType soundType)
+    {
+
+        switch (soundType)
+        {
+            case SoundType.Run:
+                AudioManager.Instance.PlayLoop(runAudioClip);
+                break;
+            case SoundType.Jump:
+                AudioManager.Instance.StopLoop(runAudioClip);
+                AudioManager.Instance.PlaySFX(jumpAudioClip);
+                break;
+            case SoundType.Land:
+                AudioManager.Instance.StopLoop(runAudioClip);
+                AudioManager.Instance.PlaySFX(landAudioClip);
+                break;
+        }
+    }
+    public void StopLoopSoundSFX()
+    {
+        AudioManager.Instance.StopLoop(runAudioClip);
     }
 }

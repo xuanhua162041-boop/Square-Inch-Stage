@@ -1,0 +1,248 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: OutLine
+  m_Shader: {fileID: 4800000, guid: bdbb7cc2f4458b043a25e2117d395410, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _DissolveTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DissolveTexPlus:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GamTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeatTex:
+        m_Texture: {fileID: 2800000, guid: 3d7b25ceb30d768498d483990f9b7c70, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LiuguangTex:
+        m_Texture: {fileID: 2800000, guid: fe64bed4308e5424bb544a03b0312d47, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 2800000, guid: 1e81cd0e8147713448dafc0e3042e646, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTexPlus:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RadialTex:
+        m_Texture: {fileID: 2800000, guid: 126c8133456cfeb46b969bbdd233456d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _VertexTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _AuroraHeight: 0.8
+    - _AuroraHueShift: 0
+    - _AuroraIntensity: 1
+    - _AuroraSaturation: 1
+    - _AuroraSteps: 50
+    - _Bias: -0.08
+    - _BlackNWhite: 0.334
+    - _BlackNWhiteSoft: 0.641
+    - _BlackNWhiteSwitch: 0
+    - _BlendMode: 1
+    - _BlurDivission: 0
+    - _BlurOrChroma: 0
+    - _BlurPower: 0.6
+    - _BlurPowerMode: 0
+    - _ChromaPower: 4.89
+    - _ChromaPowerMode: 0
+    - _ColorMix: 0.5
+    - _CullingMode: 1
+    - _DepthFade: 0.186
+    - _DissolveColorMode: 0
+    - _DissolveEdgeSwitch: 0
+    - _DissolveEdgeWide: 0.1420648
+    - _DissolveMode: 0
+    - _DissolvePower: 0.3787051
+    - _DissolveSmooth: 0
+    - _DissolveTexP: 0
+    - _DissolveTexPlusClamp: 0
+    - _DissolveTexPlusFlowMode: 0
+    - _DissolveTexPlusP: 0
+    - _DissolveTexPlusPower: 1
+    - _DissolveTexPlusRotator: 0
+    - _DissolveTexPlusSwitch: 0
+    - _DissolveTexPlusUsePro: 0
+    - _DissolveTexPlusUspeed: 0
+    - _DissolveTexPlusVspeed: 0
+    - _DissolveTexRotator: 0
+    - _DissolveTexSwitch: 0
+    - _DissolveTexUspeed: 0
+    - _DissolveTexVspeed: 0
+    - _DotPwr: 0.4
+    - _EnableSoftParticles: 0
+    - _Exposure: 1.8
+    - _Float0: 30.72
+    - _Float1: 4.99
+    - _FresnelAlphaMode: 0
+    - _FresnelColorMode: 0
+    - _FresnelMode: 0
+    - _FresnelSwitch: 0
+    - _GamAlphaMode: 0
+    - _GamTexClamp: 0
+    - _GamTexDesaturate: 1
+    - _GamTexFollowMainTex: 0
+    - _GamTexP: 0
+    - _GamTexRotator: 0
+    - _GamTexSwitch: 0
+    - _GamTexUspeed: 0
+    - _GamTexVspeed: 0
+    - _GlowPwr: 20
+    - _HeatMaskMode: 0
+    - _HeatPower: 0.551
+    - _HeatPowerMode: 0
+    - _HeatUSpeed: 0
+    - _HeatUVMode: 0
+    - _HeatVSpeed: 0
+    - _LiuguangSwitch: 1
+    - _LiuguangTexP: 0
+    - _LiuguangTexRotator: 0
+    - _LiuguangTexUVmode: 0
+    - _LiuguangUSpeed: 0
+    - _LiuguangVSpeed: 0
+    - _MainTexClamp: 0
+    - _MainTexFlowMode: 0
+    - _MainTexHue: 0
+    - _MainTexP: 0
+    - _MainTexPolarDistortionPower: 0
+    - _MainTexPolarDistortionUVScale: 1
+    - _MainTexRotator: 0
+    - _MainTexSaturation: 1
+    - _MainTexUVMode: 0
+    - _MainTexUspeed: 0
+    - _MainTexVspeed: 0
+    - _MaskPlusUsePro: 0
+    - _MaskPow: 8
+    - _MaskSub: 0.806
+    - _MaskSwitch: 0
+    - _MaskTexClamp: 0
+    - _MaskTexFlowMode: 0
+    - _MaskTexP: 0
+    - _MaskTexPlusClamp: 0
+    - _MaskTexPlusP: 0
+    - _MaskTexPlusRotator: 0
+    - _MaskTexPlusSwitch: 0
+    - _MaskTexPlusUspeed: 0
+    - _MaskTexPlusVspeed: 0
+    - _MaskTexRotator: 223
+    - _MaskTexUspeed: 0
+    - _MaskTexVspeed: 0
+    - _NoiseOctaves: 4
+    - _NoisePower: 0
+    - _NoiseScale: 1
+    - _NoiseSwitch: 0
+    - _NoiseTexP: 0
+    - _NoiseTexUspeed: 0
+    - _NoiseTexVspeed: 0
+    - _OneMinusMask: 0
+    - _OneMinusProGMask: 0
+    - _Power: -0.1
+    - _ProMaskDir: 0
+    - _ProMaskRange: 1
+    - _ProMaskSwitch: 0
+    - _ProgramMaskHori: 0.5
+    - _ProgramMaskRange: 0.71
+    - _ProgramMaskSoft: 3
+    - _ProgramMaskVerz: 0.5
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _RadialMaskMode: 0
+    - _RadialPower: 0.539
+    - _RadialUSpeed: 0.33
+    - _RadialVSpeed: 0.24
+    - _RadiusMaskP: 0
+    - _ReceiveShadows: 1
+    - _Rotation: 0
+    - _SOFT_PARTICLES_ON: 1
+    - _Scale: 2.77
+    - _ScrollSpeed: 1
+    - _SoftParticle: 0
+    - _StarColorVariation: 0.2
+    - _StarDensity: 0.04
+    - _StarIntensity: 1
+    - _StarSharpness: 70
+    - _StarTwinkleSpeed: 2.5
+    - _TimeScale: 1
+    - _UseLGTexColor: 1
+    - _VertexMode: 0
+    - _VertexPower: 0
+    - _VertexSwitch: 0
+    - _VertexTexRotator: 0
+    - _VertexTexUspeed: 0
+    - _VertexTexVspeed: 0
+    - _WaveStrength: 0.1
+    - _ZTestMode: 4
+    - _Zwrite: 0
+    - _dotorglow: 0
+    m_Colors:
+    - _AuroraColor1: {r: 0, g: 1, b: 0.5, a: 1}
+    - _AuroraColor2: {r: 1, g: 0, b: 1, a: 1}
+    - _BlurCenter: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _DissolveEdgeColor: {r: 1, g: 0.4109318, b: 0, a: 1}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EnhancedColor: {r: 25.992073, g: 25.992073, b: 25.992073, a: 1}
+    - _FlashColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FresnelColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FresnelSet: {r: 0, g: 1, b: 5, a: 0}
+    - _GlobalPolarCenter: {r: 0.5, g: 0.5, b: 1, a: 1}
+    - _HeatPolarSettings: {r: 0.5, g: 0.5, b: 1, a: 1}
+    - _LiuguangColor: {r: 90.50967, g: 90.50967, b: 90.50967, a: 1}
+    - _LiuguangPolarScale: {r: 0.5, g: 0.5, b: 1, a: 1}
+    - _LiuguangScreenTilingOffset: {r: 1, g: 1, b: 0, a: 0}
+    - _MainColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainTexPolarSets: {r: 0.5, g: 0.5, b: 1, a: 1}
+    - _StarColor: {r: 1, g: 1, b: 1, a: 1}
+    - _VertexTexDir: {r: 1, g: 1, b: 1, a: 0}
+  m_BuildTextureStacks: []
