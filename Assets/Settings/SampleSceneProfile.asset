@@ -84,16 +84,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70afe9e12c7a7ed47911bb608a23a8ff, type: 3}
   m_Name: SplitToning
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {r: 0.3886792, g: 0.35688588, b: 0.24274115, a: 1}
+    m_Value: {r: 0.24528301, g: 0.22537018, b: 0.15318617, a: 1}
   highlights:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.98420835, b: 0.8962264, a: 1}
+    m_Value: {r: 1, g: 0.9666183, b: 0.7830188, a: 1}
   balance:
     m_OverrideState: 1
-    m_Value: -6
+    m_Value: 1
 --- !u!114 &-7011558710299706105
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -338,7 +338,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
---- !u!114 &-2934507091648327771
+--- !u!114 &-1416410817552669138
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -350,22 +350,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
   m_Name: ShadowsMidtonesHighlights
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   shadows:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: 0}
   midtones:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: 0}
   highlights:
-    m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: -0.17802484}
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
   shadowsStart:
     m_OverrideState: 0
     m_Value: 0
   shadowsEnd:
     m_OverrideState: 0
-    m_Value: 0.3
+    m_Value: 9.04
   highlightsStart:
     m_OverrideState: 0
     m_Value: 0.55
@@ -390,34 +390,34 @@ MonoBehaviour:
     m_Value: 2
   gaussianStart:
     m_OverrideState: 1
-    m_Value: 37.5
+    m_Value: 102.6
   gaussianEnd:
     m_OverrideState: 1
     m_Value: 30
   gaussianMaxRadius:
     m_OverrideState: 1
-    m_Value: 1.177
+    m_Value: 0.5
   highQualitySampling:
     m_OverrideState: 0
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 34.55
+    m_Value: 5.9
   aperture:
     m_OverrideState: 1
-    m_Value: 7.5
+    m_Value: 1
   focalLength:
     m_OverrideState: 1
-    m_Value: 180
+    m_Value: 30
   bladeCount:
     m_OverrideState: 1
     m_Value: 7
   bladeCurvature:
     m_OverrideState: 1
-    m_Value: 0.664
+    m_Value: 0.559
   bladeRotation:
     m_OverrideState: 1
-    m_Value: -2
+    m_Value: -61
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,7 +442,7 @@ MonoBehaviour:
   - {fileID: -6315924818675825203}
   - {fileID: 2415536290807645890}
   - {fileID: 9196672174133119153}
-  - {fileID: -2934507091648327771}
+  - {fileID: -1416410817552669138}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3

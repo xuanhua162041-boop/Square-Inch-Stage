@@ -47,5 +47,5 @@ Material:
     - _ZTestMode: 4
     - _Zwrite: 0
     m_Colors:
-    - _MainColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainColor: {r: 1.0717734, g: 1.0717734, b: 1.0717734, a: 1}
   m_BuildTextureStacks: []

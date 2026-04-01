@@ -1,11 +1,15 @@
-using UnityEngine;
+锘縰sing UnityEngine;
 using System.Collections.Generic;
 
-// 1. 核心修改：加上这个，OnEnable 才能在编辑器模式下自动执行，从而注册进列表
 [ExecuteAlways]
 public class ShadowCasterGroup : MonoBehaviour
 {
-    // 全局静态注册表
+    private enum CasterSourceType
+    {
+        MeshFilter,
+        SpriteRenderer
+    }
+
     public static readonly List<ShadowCasterGroup> AllGroups = new List<ShadowCasterGroup>();
 
     [System.Serializable]
@@ -15,6 +19,111 @@ public class ShadowCasterGroup : MonoBehaviour
         public Vector3[] srcVertices;
         public int[] srcTriangles;
         public Bounds srcBounds;
+        public MeshFilter meshFilter;
+        public SpriteRenderer spriteRenderer;
+        public Sprite sourceSprite;
+        public Mesh sourceMesh;
+        public bool geometryDirty;
+
+        private CasterSourceType _sourceType;
+
+        public void SetupFromMeshFilter(MeshFilter mf)
+        {
+            transform = mf.transform;
+            meshFilter = mf;
+            spriteRenderer = null;
+            _sourceType = CasterSourceType.MeshFilter;
+            sourceMesh = mf.sharedMesh;
+            sourceSprite = null;
+            UpdateGeometryFromSource();
+        }
+
+        public void SetupFromSpriteRenderer(SpriteRenderer sr)
+        {
+            transform = sr.transform;
+            spriteRenderer = sr;
+            meshFilter = null;
+            _sourceType = CasterSourceType.SpriteRenderer;
+            sourceSprite = sr.sprite;
+            sourceMesh = null;
+            UpdateGeometryFromSource();
+        }
+
+        public void SyncGeometryIfNeeded()
+        {
+            if (_sourceType == CasterSourceType.MeshFilter)
+            {
+                Mesh currentMesh = meshFilter != null ? meshFilter.sharedMesh : null;
+                if (!ReferenceEquals(currentMesh, sourceMesh))
+                {
+                    sourceMesh = currentMesh;
+                    geometryDirty = true;
+                }
+            }
+            else
+            {
+                Sprite currentSprite = spriteRenderer != null ? spriteRenderer.sprite : null;
+                if (!ReferenceEquals(currentSprite, sourceSprite))
+                {
+                    sourceSprite = currentSprite;
+                    geometryDirty = true;
+                }
+            }
+
+            if (geometryDirty)
+            {
+                UpdateGeometryFromSource();
+            }
+        }
+
+        private void UpdateGeometryFromSource()
+        {
+            geometryDirty = false;
+
+            if (_sourceType == CasterSourceType.MeshFilter)
+            {
+                if (sourceMesh == null)
+                {
+                    srcVertices = System.Array.Empty<Vector3>();
+                    srcTriangles = System.Array.Empty<int>();
+                    srcBounds = default;
+                    return;
+                }
+
+                srcVertices = sourceMesh.vertices;
+                srcTriangles = sourceMesh.triangles;
+                srcBounds = sourceMesh.bounds;
+                return;
+            }
+
+            if (sourceSprite == null)
+            {
+                srcVertices = System.Array.Empty<Vector3>();
+                srcTriangles = System.Array.Empty<int>();
+                srcBounds = default;
+                return;
+            }
+
+            Vector2[] spriteVerts2D = sourceSprite.vertices;
+            ushort[] spriteTris = sourceSprite.triangles;
+            Vector3[] spriteVerts3D = new Vector3[spriteVerts2D.Length];
+            int[] triangles = new int[spriteTris.Length];
+
+            for (int i = 0; i < spriteVerts2D.Length; i++)
+            {
+                Vector2 v = spriteVerts2D[i];
+                spriteVerts3D[i] = new Vector3(v.x, v.y, 0f);
+            }
+
+            for (int i = 0; i < spriteTris.Length; i++)
+            {
+                triangles[i] = spriteTris[i];
+            }
+
+            srcVertices = spriteVerts3D;
+            srcTriangles = triangles;
+            srcBounds = sourceSprite.bounds;
+        }
     }
 
     public List<CasterItem> Casters { get; private set; } = new List<CasterItem>();
@@ -24,10 +133,8 @@ public class ShadowCasterGroup : MonoBehaviour
         InitializeGroup();
     }
 
-    // 2. 修改：确保在编辑器下每次重新激活或脚本编译后，都能重新初始化数据并注册
     void OnEnable()
     {
-        // 这是一个保险措施：如果 Casters 数据丢了（编辑器常见情况），重新获取
         if (Casters.Count == 0)
         {
             InitializeGroup();
@@ -47,10 +154,7 @@ public class ShadowCasterGroup : MonoBehaviour
         }
     }
 
-    // 3. 新增：右键菜单功能。
-    // 在 Hierarchy 选中物体，在 Inspector 的脚本组件标题栏右键 -> 选择 "刷新 Mesh 数据"
-    // 这样当你换了子物体的模型后，不需要重新运行游戏就能更新影子数据
-    [ContextMenu("刷新 Mesh 数据")]
+    [ContextMenu("鍒锋柊 Shadow Casters")]
     public void RebuildData()
     {
         InitializeGroup();
@@ -59,22 +163,29 @@ public class ShadowCasterGroup : MonoBehaviour
     private void InitializeGroup()
     {
         Casters.Clear();
-        MeshFilter[] mfs = GetComponentsInChildren<MeshFilter>(true); // false 表示不包括非激活物体
+
+        int shadowCasterLayer = LayerMask.NameToLayer("ShadowCaster");
+        MeshFilter[] mfs = GetComponentsInChildren<MeshFilter>(true);
+        SpriteRenderer[] srs = GetComponentsInChildren<SpriteRenderer>(true);
 
         foreach (var mf in mfs)
         {
-            if (mf.gameObject.layer != LayerMask.NameToLayer("FrontWall")) continue;
+            if (mf.gameObject.layer != shadowCasterLayer) continue;
             if (mf.sharedMesh == null) continue;
-            // 排除自己，只加子物体
-            if (mf.transform == this.transform && mfs.Length > 1) continue;
+            if (mf.transform == transform && mfs.Length > 1) continue;
 
             CasterItem item = new CasterItem();
-            item.transform = mf.transform;
-            // 注意：这里保存的是 local space 的顶点，运行时会通过 transform 变换
-            item.srcVertices = mf.sharedMesh.vertices;
-            item.srcTriangles = mf.sharedMesh.triangles;
-            item.srcBounds = mf.sharedMesh.bounds;
+            item.SetupFromMeshFilter(mf);
+            Casters.Add(item);
+        }
 
+        foreach (var sr in srs)
+        {
+            if (sr.gameObject.layer != shadowCasterLayer) continue;
+            if (sr.sprite == null) continue;
+
+            CasterItem item = new CasterItem();
+            item.SetupFromSpriteRenderer(sr);
             Casters.Add(item);
         }
     }

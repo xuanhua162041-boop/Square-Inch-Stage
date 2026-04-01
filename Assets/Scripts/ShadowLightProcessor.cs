@@ -1,4 +1,4 @@
-using UnityEngine;
+锘縰sing UnityEngine;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
 
@@ -7,40 +7,38 @@ using System.Collections.Generic;
 [ExecuteAlways]
 public class ShadowLightProcessor : MonoBehaviour
 {
-    [Header("环境设置")]
+    [Header("Wall")]
     public Transform wallTransform;
 
-    [Header("物理参数")]
+    [Header("Shadow")]
     public float shadowThickness = 1.5f;
     public float bias = 0.03f;
     [Range(0f, 5f)] public float rangeBuffer = 2.0f;
     public PhysicMaterial shadowPhysicsMat;
+    public bool cullOffscreenShadows = true;
+    [Min(0f)] public float screenCullPadding = 0.5f;
 
-    [Header("调试")]
-    public bool showDebugVisuals = true;
+    [Header("Debug")]
+    public bool showDebugVisuals = false;
     public Material debugMaterial;
 
-    // 内部类
     private class ShadowInstance
     {
         public GameObject go;
         public Mesh mesh;
         public MeshFilter mf;
         public MeshCollider mc;
-        public MeshRenderer mr;
         public bool isActive;
-        public ShadowFreezable freezableComp; // 缓存组件
+        public ShadowFreezable freezableComp;
     }
 
-    private Dictionary<Transform, ShadowInstance> _shadowInstanceMap = new Dictionary<Transform, ShadowInstance>();
+    private readonly Dictionary<Transform, ShadowInstance> _shadowInstanceMap = new Dictionary<Transform, ShadowInstance>();
     private Light _light;
     private int _shadowLayer;
-
-    // === 1. 新增：专门装影子的容器（不随灯光移动） ===
     private Transform _shadowContainer;
 
-    private List<Vector3> _tempVerts = new List<Vector3>();
-    private List<int> _tempTris = new List<int>();
+    private readonly List<Vector3> _tempVerts = new List<Vector3>();
+    private readonly List<int> _tempTris = new List<int>();
 
     void Start() { InitData(); }
     void Update() { if (!Application.isPlaying) ProcessShadowLogic(); }
@@ -53,33 +51,37 @@ public class ShadowLightProcessor : MonoBehaviour
         if (_shadowLayer == -1) _shadowLayer = 0;
         if (debugMaterial == null) debugMaterial = new Material(Shader.Find("Sprites/Default"));
 
-        // === 2. 初始化容器 ===
-        // 找一下有没有现成的，没有就造一个
         if (_shadowContainer == null)
         {
             var go = GameObject.Find("Dynamic_Shadow_Container");
             if (go == null)
             {
                 go = new GameObject("Dynamic_Shadow_Container");
-                // 这一点很重要：容器不应该乱动
                 go.transform.position = Vector3.zero;
                 go.transform.rotation = Quaternion.identity;
             }
             _shadowContainer = go.transform;
-
-            // 它是独立的，不要设为 Light 的子物体！
-            // 也不要设为 HideAndDontSave，方便你在 Hierarchy 里看
         }
     }
 
     void ProcessShadowLogic()
     {
-        if (wallTransform == null || _light == null) { InitData(); if (_light == null) return; }
+        if (wallTransform == null || _light == null)
+        {
+            InitData();
+            if (_light == null) return;
+        }
 
         Vector3 lightPos = transform.position;
         float lightRange = _light.range + rangeBuffer;
         float spotAngle = _light.type == LightType.Spot ? _light.spotAngle : 360f;
         Vector3 lightDir = transform.forward;
+
+        Plane[] cameraPlanes = null;
+        if (Application.isPlaying && cullOffscreenShadows && Camera.main != null)
+        {
+            cameraPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+        }
 
         foreach (var kvp in _shadowInstanceMap) kvp.Value.isActive = false;
 
@@ -93,6 +95,9 @@ public class ShadowLightProcessor : MonoBehaviour
                 foreach (var item in group.Casters)
                 {
                     if (item.transform == null || !item.transform.gameObject.activeInHierarchy) continue;
+
+                    item.SyncGeometryIfNeeded();
+                    if (item.srcVertices == null || item.srcTriangles == null || item.srcVertices.Length == 0 || item.srcTriangles.Length == 0) continue;
 
                     if (!_shadowInstanceMap.TryGetValue(item.transform, out ShadowInstance instance))
                     {
@@ -109,16 +114,14 @@ public class ShadowLightProcessor : MonoBehaviour
                     instance.isActive = true;
                     if (!instance.go.activeSelf) instance.go.SetActive(true);
 
-                    // === 3. 极简定格逻辑 ===
-                    // 因为影子不是灯光的子物体，所以只要不更新Mesh，它就绝对静止
                     if (instance.freezableComp != null && instance.freezableComp.isFrozen)
                     {
-                        continue; // 跳过计算 = 定格
+                        continue;
                     }
 
-                    // 正常更新
                     bool inLightRange = IsInRange(item, lightPos, lightDir, lightRange, spotAngle);
-                    if (inLightRange || !Application.isPlaying)
+                    bool isShadowVisible = cameraPlanes == null || IsShadowVisible(item, lightPos, cameraPlanes);
+                    if (inLightRange && isShadowVisible)
                     {
                         UpdateShadowFor(item, instance, lightPos);
                     }
@@ -135,19 +138,13 @@ public class ShadowLightProcessor : MonoBehaviour
         ShadowInstance instance = new ShadowInstance();
         GameObject go = new GameObject($"Shadow_For_{item.transform.name}");
 
-        // === 4. 关键修改：挂到独立的容器下，而不是 this.transform ===
         if (_shadowContainer != null) go.transform.SetParent(_shadowContainer);
 
         go.layer = _shadowLayer;
-        // 编辑器里不保存生成的影子，保持干净
         go.hideFlags = HideFlags.DontSave;
 
         instance.go = go;
         instance.mf = go.AddComponent<MeshFilter>();
-        instance.mr = go.AddComponent<MeshRenderer>();
-        instance.mr.material = debugMaterial;
-        instance.mr.shadowCastingMode = ShadowCastingMode.Off;
-        instance.mr.receiveShadows = false;
 
         instance.mc = go.AddComponent<MeshCollider>();
         instance.mc.convex = false;
@@ -158,16 +155,9 @@ public class ShadowLightProcessor : MonoBehaviour
         instance.mf.mesh = instance.mesh;
 
         instance.freezableComp = item.transform.GetComponent<ShadowFreezable>();
-        if (instance.freezableComp!=null)
-        {
-            //能被定格 就交给这个物体自己的 影子管理脚本
-            instance.freezableComp.RegisterShadow(instance.go, instance.mr);
-        }
 
         return instance;
     }
-
-    // --- 以下数学部分保持原样，无需改动 ---
 
     void CleanupShadows()
     {
@@ -181,12 +171,17 @@ public class ShadowLightProcessor : MonoBehaviour
                 SafeDestroyShadow(kvp.Value);
                 continue;
             }
+
             if (!kvp.Value.isActive && kvp.Value.go.activeSelf)
             {
                 kvp.Value.go.SetActive(false);
             }
         }
-        if (keysToRemove != null) foreach (var k in keysToRemove) _shadowInstanceMap.Remove(k);
+
+        if (keysToRemove != null)
+        {
+            foreach (var k in keysToRemove) _shadowInstanceMap.Remove(k);
+        }
     }
 
     bool IsInRange(ShadowCasterGroup.CasterItem item, Vector3 lightPos, Vector3 lightDir, float range, float angle)
@@ -197,8 +192,45 @@ public class ShadowLightProcessor : MonoBehaviour
         return true;
     }
 
+    bool IsShadowVisible(ShadowCasterGroup.CasterItem item, Vector3 lightPos, Plane[] cameraPlanes)
+    {
+        if (wallTransform == null || item.srcVertices == null || item.srcVertices.Length == 0) return false;
+
+        Vector3 planePoint = wallTransform.position;
+        Vector3 planeNormal = wallTransform.up;
+        Matrix4x4 localToWorld = item.transform.localToWorldMatrix;
+
+        Vector3 firstWorldVert = localToWorld.MultiplyPoint3x4(item.srcVertices[0]);
+        Bounds shadowBounds = new Bounds(ProjectToWall(firstWorldVert, lightPos, planePoint, planeNormal), Vector3.zero);
+
+        for (int i = 1; i < item.srcVertices.Length; i++)
+        {
+            Vector3 worldVert = localToWorld.MultiplyPoint3x4(item.srcVertices[i]);
+            shadowBounds.Encapsulate(ProjectToWall(worldVert, lightPos, planePoint, planeNormal));
+        }
+
+        if (screenCullPadding > 0f)
+        {
+            shadowBounds.Expand(screenCullPadding);
+        }
+
+        return GeometryUtility.TestPlanesAABB(cameraPlanes, shadowBounds);
+    }
+
+    Vector3 ProjectToWall(Vector3 worldVert, Vector3 lightPos, Vector3 planePoint, Vector3 planeNormal)
+    {
+        Vector3 rayDir = (worldVert - lightPos).normalized;
+        float denom = Vector3.Dot(planeNormal, rayDir);
+        if (Mathf.Abs(denom) < 1e-5f) denom = 1e-5f;
+        float t = Vector3.Dot(planeNormal, (planePoint - lightPos)) / denom;
+        return lightPos + rayDir * t + planeNormal * bias;
+    }
+
     void UpdateShadowFor(ShadowCasterGroup.CasterItem item, ShadowInstance instance, Vector3 lightPos)
     {
+        Vector3 s = instance.go.transform.lossyScale;
+        if (Mathf.Abs(s.x) < 1e-4f || Mathf.Abs(s.y) < 1e-4f || Mathf.Abs(s.z) < 1e-4f) return;
+
         Vector3 planePoint = wallTransform.position;
         Vector3 planeNormal = wallTransform.up;
         Matrix4x4 localToWorld = item.transform.localToWorldMatrix;
@@ -208,44 +240,49 @@ public class ShadowLightProcessor : MonoBehaviour
         _tempVerts.Clear();
         if (_tempVerts.Capacity < count * 2) _tempVerts.Capacity = count * 2;
 
-        // 顶面
         for (int i = 0; i < count; i++)
         {
             Vector3 worldVert = localToWorld.MultiplyPoint3x4(item.srcVertices[i]);
-            Vector3 rayDir = (worldVert - lightPos).normalized;
-            float denom = Vector3.Dot(planeNormal, rayDir);
-            if (Mathf.Abs(denom) < 1e-5f) denom = 1e-5f;
-            float t = Vector3.Dot(planeNormal, (planePoint - lightPos)) / denom;
-            _tempVerts.Add(worldToShadowLocal.MultiplyPoint3x4(lightPos + rayDir * t + planeNormal * bias));
+            _tempVerts.Add(worldToShadowLocal.MultiplyPoint3x4(ProjectToWall(worldVert, lightPos, planePoint, planeNormal)));
         }
-        // 底面
+
         for (int i = 0; i < count; i++)
         {
             Vector3 worldVert = localToWorld.MultiplyPoint3x4(item.srcVertices[i]);
-            Vector3 rayDir = (worldVert - lightPos).normalized;
-            float denom = Vector3.Dot(planeNormal, rayDir);
-            if (Mathf.Abs(denom) < 1e-5f) denom = 1e-5f;
-            float t = Vector3.Dot(planeNormal, (planePoint - lightPos)) / denom;
-            Vector3 bottomPoint = lightPos + rayDir * t + planeNormal * (bias + shadowThickness);
+            Vector3 topPoint = ProjectToWall(worldVert, lightPos, planePoint, planeNormal);
+            Vector3 bottomPoint = topPoint + planeNormal * shadowThickness;
             _tempVerts.Add(worldToShadowLocal.MultiplyPoint3x4(bottomPoint));
         }
 
         _tempTris.Clear();
         int srcTriCount = item.srcTriangles.Length;
-        for (int i = 0; i < srcTriCount; i += 3) { _tempTris.Add(item.srcTriangles[i]); _tempTris.Add(item.srcTriangles[i + 1]); _tempTris.Add(item.srcTriangles[i + 2]); }
-        for (int i = 0; i < srcTriCount; i += 3) { int off = count; _tempTris.Add(item.srcTriangles[i + 2] + off); _tempTris.Add(item.srcTriangles[i + 1] + off); _tempTris.Add(item.srcTriangles[i] + off); }
-        for (int i = 0; i < srcTriCount; i += 3) { AddSideQuad(_tempTris, item.srcTriangles[i], item.srcTriangles[i + 1], count); AddSideQuad(_tempTris, item.srcTriangles[i + 1], item.srcTriangles[i + 2], count); AddSideQuad(_tempTris, item.srcTriangles[i + 2], item.srcTriangles[i], count); }
+        for (int i = 0; i < srcTriCount; i += 3)
+        {
+            _tempTris.Add(item.srcTriangles[i]);
+            _tempTris.Add(item.srcTriangles[i + 1]);
+            _tempTris.Add(item.srcTriangles[i + 2]);
+        }
+        for (int i = 0; i < srcTriCount; i += 3)
+        {
+            int off = count;
+            _tempTris.Add(item.srcTriangles[i + 2] + off);
+            _tempTris.Add(item.srcTriangles[i + 1] + off);
+            _tempTris.Add(item.srcTriangles[i] + off);
+        }
+        for (int i = 0; i < srcTriCount; i += 3)
+        {
+            AddSideQuad(_tempTris, item.srcTriangles[i], item.srcTriangles[i + 1], count);
+            AddSideQuad(_tempTris, item.srcTriangles[i + 1], item.srcTriangles[i + 2], count);
+            AddSideQuad(_tempTris, item.srcTriangles[i + 2], item.srcTriangles[i], count);
+        }
 
         instance.mesh.Clear();
         instance.mesh.SetVertices(_tempVerts);
         instance.mesh.SetTriangles(_tempTris, 0);
-        instance.mesh.RecalculateNormals();
         instance.mesh.RecalculateBounds();
 
         instance.mc.sharedMesh = null;
         instance.mc.sharedMesh = instance.mesh;
-
-        if (instance.mr.enabled != showDebugVisuals) instance.mr.enabled = showDebugVisuals;
     }
 
     void AddSideQuad(List<int> tris, int i1, int i2, int off)

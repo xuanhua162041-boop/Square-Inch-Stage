@@ -52,7 +52,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     m_Colors:
-    - _Color0: {r: 0.690566, g: 0.6302415, b: 0.57199717, a: 1}
+    - _Color0: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Vector0: {r: 16, g: 9, b: 0, a: 0}
   m_BuildTextureStacks: []

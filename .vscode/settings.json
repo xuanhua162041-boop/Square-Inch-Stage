@@ -51,5 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Square Inch Stage.sln"
+    "dotnet.defaultSolution": "Square Inch Stage.sln",
+    "kiroAgent.configureMCP": "Disabled"
 }

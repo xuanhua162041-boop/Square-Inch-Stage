@@ -1,19 +1,30 @@
-﻿using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// 挂在需要冻结阴影的物体上。
+/// 冻结时：
+///   1. 把物体移到 FrozenShadow 层
+///   2. 在主光源位置生成一个复制灯，只照射 FrozenShadow 层，位置固定
+///   3. 主光源排除 FrozenShadow 层
+///   4. 物体动画/物理停止，碰撞体停止更新
+/// 解冻时：恢复所有状态
+/// </summary>
 public class ShadowFreezable : MonoBehaviour
 {
     [Header("定格参数")]
     public float freezeDuration = 5.0f;
     public bool isFrozen = false;
 
+    [Header("主光源引用")]
+    [Tooltip("场景中的主 Spot Light")]
+    public Light mainLight;
+    [Tooltip("专用的冻结投影灯，场景里预先配置好，默认隐藏")]
+    public Light frozenLight;
+
     [Header("视音效果")]
-    public float transitionDuration = 1f;
-    [Tooltip("必须和Shader里的 Reference Name 完全一致！")]
-    public string dissolveProperty = "_DissolveProgress";
+    public GameObject FreezeSFXObj;
     public AudioClip DiDaSFX;
     public AudioClip UnfreezeSFX;
 
@@ -23,25 +34,53 @@ public class ShadowFreezable : MonoBehaviour
     public UnityEvent<float> onFreezeTimer;
 
     private float _timer;
-    private GameObject _shadowGo;
-    private MeshRenderer _shadowMR;
-    private bool unFreezeSFX = false;
+    private bool _unFreezeSFX = false;
+    private Animator _animator;
+    private Rigidbody _rigidbody;
+    private Animator _freezeSFXAnim;
 
-    public void RegisterShadow(GameObject go, MeshRenderer mr)
+    // 冻结用的复制灯
+    private Light _frozenLight;
+    // 物体原始 layer（递归保存）
+    private System.Collections.Generic.Dictionary<GameObject, int> _originalLayers
+        = new System.Collections.Generic.Dictionary<GameObject, int>();
+    // 主光源原始 culling mask
+    private int _originalMainLightMask;
+
+    private static readonly int FrozenShadowLayer = -1; // 运行时获取
+
+    void Awake()
     {
-        _shadowGo = go;
-        _shadowMR = mr;
+        _animator  = GetComponentInChildren<Animator>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     public void ActivateFreeze()
     {
-        unFreezeSFX = false;
+        _unFreezeSFX = false;
         _timer = freezeDuration;
         if (!isFrozen)
         {
-
             isFrozen = true;
+
+            // 停止动画和物理
+            if (_animator != null) _animator.enabled = false;
+            if (_rigidbody != null)
+            {
+                _rigidbody.velocity        = Vector3.zero;
+                _rigidbody.angularVelocity = Vector3.zero;
+                _rigidbody.isKinematic     = true;
+            }
+
+            // 冻结阴影
+            DoFreezeLight();
+
             StartCoroutine(TiDaClock());
+            if (FreezeSFXObj != null)
+            {
+                var sfxObj = Instantiate(FreezeSFXObj, transform);
+                _freezeSFXAnim = sfxObj.GetComponent<Animator>();
+            }
             onFreezeStart?.Invoke();
         }
     }
@@ -51,107 +90,111 @@ public class ShadowFreezable : MonoBehaviour
         if (isFrozen) PerformUnFreeze();
     }
 
+    void DoFreezeLight()
+    {
+        if (mainLight == null) return;
+
+        int frozenLayer = LayerMask.NameToLayer("FrozenShadow");
+        if (frozenLayer == -1)
+        {
+            Debug.LogWarning("[ShadowFreezable] 请在 Tags & Layers 里添加 'FrozenShadow' 层");
+            return;
+        }
+
+        // 1. 把物体（含子物体）移到 FrozenShadow 层
+        _originalLayers.Clear();
+        SetLayerRecursive(gameObject, frozenLayer, _originalLayers);
+
+        // 2. 启用冻结灯，同步到主光源当前位置/旋转
+        if (frozenLight != null)
+        {
+            frozenLight.transform.position = mainLight.transform.position;
+            frozenLight.transform.rotation = mainLight.transform.rotation;
+            frozenLight.gameObject.SetActive(true);
+            _frozenLight = frozenLight;
+        }
+        // FrozenShadow 层（物体）+ WallReceiveShadow 层（墙面接收阴影）
+        int wallLayer = LayerMask.NameToLayer("WallReceiveShadow");
+        if (wallLayer == -1)
+        {
+            Debug.LogWarning("[ShadowFreezable] 请在 Tags & Layers 里添加 'WallReceiveShadow' 层");
+            wallLayer = LayerMask.NameToLayer("Default");
+        }
+        _frozenLight.cullingMask = (1 << frozenLayer) | (1 << wallLayer);
+
+        // 3. 主光源排除 FrozenShadow 层
+        _originalMainLightMask   = mainLight.cullingMask;
+        mainLight.cullingMask    = mainLight.cullingMask & ~(1 << frozenLayer);
+    }
+
+    void DoUnfreezeLight()
+    {
+        int frozenLayer = LayerMask.NameToLayer("FrozenShadow");
+
+        // 恢复物体原始 layer
+        foreach (var kvp in _originalLayers)
+            if (kvp.Key != null) kvp.Key.layer = kvp.Value;
+        _originalLayers.Clear();
+
+        // 恢复主光源 culling mask
+        if (mainLight != null)
+            mainLight.cullingMask = _originalMainLightMask;
+
+        // 隐藏冻结灯
+        if (_frozenLight != null)
+        {
+            _frozenLight.gameObject.SetActive(false);
+            _frozenLight = null;
+        }
+    }
+
     IEnumerator TiDaClock()
     {
-        Debug.Log("TiDaIenumerator");
-
         while (isFrozen)
         {
-            Debug.Log("TiDaIenumerator");
             yield return new WaitForSeconds(1f);
             if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(DiDaSFX);
         }
     }
 
-    private void Update()
+    void Update()
     {
-        if (isFrozen)
+        if (!isFrozen) return;
+
+        _timer -= Time.deltaTime;
+        onFreezeTimer?.Invoke(Mathf.Clamp01(_timer / freezeDuration));
+
+        if (_timer <= 1f && !_unFreezeSFX)
         {
-            _timer -= Time.deltaTime;
-            onFreezeTimer?.Invoke(Mathf.Clamp01(_timer / freezeDuration));
-
-            if (_timer <= 1f && !unFreezeSFX)
-            {
-                if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(UnfreezeSFX);
-                unFreezeSFX = true;
-            }
-
-            if (_timer <= 0f) PerformUnFreeze();
+            if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(UnfreezeSFX);
+            _unFreezeSFX = true;
         }
+
+        if (_timer <= 0f) PerformUnFreeze();
     }
 
     void PerformUnFreeze()
     {
-        if (_shadowGo != null && _shadowMR != null)
-        {
-            PlayCrossDissolveEffect();
-        }
-        else
-        {
-            Debug.LogWarning($"[{name}] 解冻失败：找不到影子引用。可能 ShadowLightProcessor 没运行？");
-        }
+        if (_freezeSFXAnim != null)
+            _freezeSFXAnim.Play("TimeFreezeSFXDissolve");
+
+        if (_animator  != null) _animator.enabled    = true;
+        if (_rigidbody != null) _rigidbody.isKinematic = false;
+
+        DoUnfreezeLight();
 
         isFrozen = false;
-        _timer = 0f;
+        _timer   = 0f;
         onFreezeEnd?.Invoke();
         onFreezeTimer?.Invoke(0f);
     }
 
-    void PlayCrossDissolveEffect()
+    static void SetLayerRecursive(GameObject obj, int newLayer,
+        System.Collections.Generic.Dictionary<GameObject, int> originalLayers)
     {
-        // === 1. 自检 ===
-        if (_shadowMR.sharedMaterial == null) return;
-
-        // === 2. 制造残影 ===
-        GameObject ghost = Instantiate(_shadowGo, _shadowGo.transform.position, _shadowGo.transform.rotation, _shadowGo.transform.parent);
-        ghost.name = _shadowGo.name + "_Ghost";
-
-        Collider ghostCollider = ghost.GetComponent<Collider>();
-        if (ghostCollider != null) Destroy(ghostCollider);
-
-        MeshFilter ghostMf = ghost.GetComponent<MeshFilter>();
-        Mesh originalMesh = _shadowGo.GetComponent<MeshFilter>().sharedMesh;
-        if (originalMesh != null) ghostMf.mesh = Instantiate(originalMesh);
-
-        // === 3. 材质准备 ===
-        MeshRenderer ghostMr = ghost.GetComponent<MeshRenderer>();
-        // 分离材质实例
-        Material ghostMat = new Material(_shadowMR.sharedMaterial);
-        Material realMat = new Material(_shadowMR.sharedMaterial);
-
-        ghostMr.material = ghostMat;
-        _shadowMR.material = realMat;
-
-        // 防止干扰
-        ghostMr.transform.DOKill();
-        _shadowMR.transform.DOKill();
-
-        // === 4. 设定数值 (关键！) ===
-        float visibleVal = 1.1f;    // 完全显示
-
-        // 【核心防穿帮】: 
-        // 既然 0.5 会看见黑块，那新影子的起点必须是 -0.1 (Shader最小值)
-        // 这样它才能“无中生有”，而不是“半路杀出”。
-        float absoluteHideVal = -0.1f;
-
-        // === 5. 执行并行双向动画 (Cross Dissolve) ===
-
-        // --- 旧影子 (Ghost) ---
-        // 状态：显示 -> 消散
-        ghostMat.SetFloat(dissolveProperty, visibleVal);
-        ghostMat.DOFloat(absoluteHideVal, dissolveProperty, transitionDuration)
-            .SetEase(Ease.Linear);
-
-        // --- 新影子 (Real) ---
-        // 状态：彻底隐形 -> 显示
-        // 先按死在 -0.1，防止瞬间穿帮
-        realMat.SetFloat(dissolveProperty, absoluteHideVal);
-        // 马上开始变到 1.1
-        realMat.DOFloat(visibleVal, dissolveProperty, transitionDuration)
-            .SetEase(Ease.Linear);
-
-        // === 6. 清理 ===
-        Destroy(ghost, transitionDuration + 0.1f);
-        if (ghostMf.mesh != null) Destroy(ghostMf.mesh, transitionDuration + 0.1f);
+        originalLayers[obj] = obj.layer;
+        obj.layer = newLayer;
+        foreach (Transform child in obj.transform)
+            SetLayerRecursive(child.gameObject, newLayer, originalLayers);
     }
 }

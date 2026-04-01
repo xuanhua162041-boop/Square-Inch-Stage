@@ -163,6 +163,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db50c4729aaf57d44bb5ec6c4f827baa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ink: {fileID: 0}
+  runAudioClip: {fileID: 0}
+  jumpAudioClip: {fileID: 0}
+  landAudioClip: {fileID: 0}
   speed: 5
   jumpForce: 15
   groundCheck: {fileID: 7826388054334609168}

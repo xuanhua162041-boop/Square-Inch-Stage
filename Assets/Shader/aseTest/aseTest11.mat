@@ -71,7 +71,7 @@ Material:
     m_Floats:
     - _AlphaCutoff: 0.5
     - _EdgeWidth: 0.1549407
-    - _Float0: 0.58
+    - _Float0: 0
     - _Float1: 1.89
     - _Float2: 0
     - _NormalScale: 0.5
@@ -79,7 +79,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     m_Colors:
-    - _Color0: {r: 2.8618033, g: 2.8618033, b: 2.8618033, a: 1}
+    - _Color0: {r: 2.8618033, g: 2.8618033, b: 2.8618033, a: 0.60784316}
     - _EdgeColor: {r: 4.594794, g: 4.594794, b: 4.594794, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _MainColor: {r: 1, g: 1, b: 1, a: 1}

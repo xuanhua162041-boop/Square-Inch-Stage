@@ -12,7 +12,9 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _RECEIVESHADOWS_OFF
+  - _RECEIVE_SHADOWS_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -38,9 +40,9 @@ Material:
     - _EdgeTex:
         m_Texture: {fileID: 2800000, guid: 47b81932f47ace1448339b843c8a8327, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Offset: {x: 0, y: 0.36}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 644f231fb1b77554ba5b45dd4a564743, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3f40643349c374945b950ab1a2f165f5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseAddTex:
@@ -48,7 +50,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseAddTex1:
-        m_Texture: {fileID: 2800000, guid: 644f231fb1b77554ba5b45dd4a564743, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5f148371801d9cd4084692d3a2f94e54, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureSample0:
@@ -74,13 +76,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
-    - _DissolveProgress: 1.1
+    - _DissolveProgress: 0.984
     - _DissolveProgress1: 1.1
     - _EdgeMask_p: 6.39
-    - _Edgeinstanty: 3.8
+    - _Edgeinstanty: 2.67
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 1
+    - _ReceiveShadows: 0
     - _TessEdgeLength: 16
     - _TessMax: 25
     - _TessMaxDisp: 25
@@ -92,9 +94,9 @@ Material:
     - _AddColor1: {r: 4.8456817, g: 3.567318, b: 1.3805622, a: 0}
     - _Color0: {r: 1, g: 1, b: 1, a: 0}
     - _DissolveTextureUVScale: {r: 1, g: 1, b: 0, a: 0}
-    - _EdgeColor: {r: 2.828427, g: 2.451847, b: 1.019301, a: 0}
+    - _EdgeColor: {r: 1.5315119, g: 1.4325536, b: 1.1707919, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MainColor: {r: 0.20754719, g: 0.20754719, b: 0.20754719, a: 0}
+    - _MainColor: {r: 0.42352945, g: 0.1764706, b: 0.050980397, a: 1}
     - _UV1: {r: 4, g: 4, b: 0, a: 0}
     - _UV2: {r: 4, g: 4, b: 0, a: 0}
   m_BuildTextureStacks: []

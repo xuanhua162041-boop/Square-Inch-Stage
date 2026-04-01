@@ -5,9 +5,22 @@ using UnityEngine;
 public class AudioManager : Singleton<AudioManager>
 {
     [Header("音量设置")]
-    [Range(0f, 1f)]public float masterVolume = 1f;
-    [Range(0f,1f)]public float sfxVolume = 1f;
-    [Range(0f,1f)]public float bgmVolume = 1f;
+    [Range(0f, 1f)]public float _masterVolume = 1f;
+    [Range(0f,1f)]private float _sfxVolume = 1f;
+    [Range(0f,1f)]private float _bgmVolume = 1f;
+
+    public float sfxVolume
+    {
+        get { return _sfxVolume; }
+        set { _sfxVolume = value; }
+    }
+    public float bgmVolume
+    {
+        get { return _bgmVolume; }
+        set { _bgmVolume = value; }
+    }
+
+
 
     //内部变量
     private AudioSource _bgmSource;
@@ -17,17 +30,27 @@ public class AudioManager : Singleton<AudioManager>
 
     protected override void OnAwake()
     {
+        DontDestroyOnLoad(this.gameObject);
         _bgmSource = CreateSource("Channel_BGM", true);
         for (int i = 0; i < 5; i++)
         {
             _sfxSources.Add(CreateSource($"Channel_SFX_{i}", false));
         }
+
+        DontDestroyOnLoad(this.gameObject);
     }
     public void PlaySFX(AudioClip clip)
     {
         if (clip == null) return;
         AudioSource source = GetFreeSFXSource();
-        source.PlayOneShot(clip,sfxVolume * masterVolume);
+        source.PlayOneShot(clip,_sfxVolume * _masterVolume);
+    }
+    public AudioSource PlaySFXBack(AudioClip clip)
+    {
+        if (clip == null) return null;
+        AudioSource source = GetFreeSFXSource();
+        source.PlayOneShot(clip,_sfxVolume * _masterVolume);
+        return source;
     }
 
     public void PlayLoop(AudioClip clip)
@@ -44,7 +67,7 @@ public class AudioManager : Singleton<AudioManager>
 
         source.clip = clip;
         source.loop = true;
-        source.volume = sfxVolume * masterVolume;
+        source.volume = _sfxVolume * _masterVolume;
         source.Play();
 
         _activeLoops.Add(clip, source);
@@ -68,7 +91,7 @@ public class AudioManager : Singleton<AudioManager>
     {
         if (clip == null || _bgmSource.clip == clip) return;
         _bgmSource.clip = clip;
-        _bgmSource.volume = bgmVolume * masterVolume;
+        _bgmSource.volume = _bgmVolume * _masterVolume;
         _bgmSource.Play();
     }
 
@@ -98,4 +121,6 @@ public class AudioManager : Singleton<AudioManager>
         _sfxSources.Add(newSource);
         return newSource;
     }
+
+    
 }

@@ -1,186 +1,283 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+Ôªøusing System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("“Ù–ß")]
+    [Header("Á≤íÂ≠êÊã®Áâá")]
+    public GameObject ink;
+
+    [Header("Èü≥Êïà")]
     public AudioClip runAudioClip;
     public AudioClip jumpAudioClip;
     public AudioClip landAudioClip;
-    [Space(10)]
-    private Rigidbody rb;
-    private Collider coll; // Ω®“È”√ CapsuleCollider
-    private Animator anim;
 
-    [Header("“∆∂Ø≤Œ ˝")]
-    public float speed = 5f;
+    [Header("ÁßªÂä®ÂèÇÊï∞")]
+    public float maxMoveSpeed = 5f;
+    public float groundAcceleration = 45f;
+    public float groundDeceleration = 55f;
+    public float airAcceleration = 22f;
+    public float airDeceleration = 18f;
+
+    [Header("Ë∑≥Ë∑ÉÂèÇÊï∞")]
     public float jumpForce = 8f;
+    public int extraAirJumps = 1;
+    public float coyoteTime = 0.12f;
+    public float jumpBufferTime = 0.12f;
+    public float fallGravityMultiplier = 2.2f;
+    public float jumpCutGravityMultiplier = 2.2f;
+    public float maxFallSpeed = 20f;
 
-    [Header("ºÏ≤‚≤Œ ˝")]
+    [Header("Ê£ÄÊµãÂèÇÊï∞")]
     public Transform groundCheck;
     public Transform deathCheck;
     public LayerMask Shadow;
     public float groundCheckRadius = 0.25f;
+    public float deathCheckRadius = 0.12f;
+    public float deathConfirmTime = 0.08f;
 
-    public bool isGround, isJump, isDeath;
-
-    [Header("≈‰÷√»ÀŒÔ≥ØœÚ")]
+    [Header("ÈÖçÁΩÆ‰∫∫Áâ©ÊúùÂêë")]
     public Vector3 initialScale = new Vector3(1, 1, 1);
+
+    public bool isGround;
+    public bool isJump;
+    public bool isDeath;
+
+    private Rigidbody rb;
+    private Animator anim;
     private float defaultXScale;
-
-    bool jumpPressed;
-    int jumpCount;
-
+    private bool moveBan = false;
+    private bool jumpHeld;
+    private bool jumpReleased;
+    private float moveInput;
+    private float coyoteCounter;
+    private float jumpBufferCounter;
+    private float deathContactTimer;
+    private int airJumpsRemaining;
+    private bool wasGrounded;
 
     private void Start()
     {
-        isDeath = false;
+        MemoryItem.CollectMemoryAction += BanInput;
+        MemoryCanvasUI.OnVideoEndAction += OpenInput;
+
         rb = GetComponent<Rigidbody>();
-        coll = GetComponent<Collider>();
         anim = GetComponent<Animator>();
+        isDeath = false;
 
         transform.localScale = initialScale;
         defaultXScale = Mathf.Sign(initialScale.x);
+        airJumpsRemaining = extraAirJumps;
+    }
+
+    private void OnDestroy()
+    {
+        MemoryItem.CollectMemoryAction -= BanInput;
+        MemoryCanvasUI.OnVideoEndAction -= OpenInput;
     }
 
     private void Update()
     {
-        //  ‰»Î∑≈‘⁄ Update  «∂‘µƒ
-        if (Input.GetButtonDown("Jump") && jumpCount > 0 && !isDeath)
+        if (isDeath) return;
+
+        moveInput = moveBan ? 0f : Input.GetAxisRaw("Horizontal");
+        jumpHeld = Input.GetButton("Jump");
+
+        if (!moveBan && Input.GetButtonDown("Jump"))
         {
-            jumpPressed = true;
+            jumpBufferCounter = jumpBufferTime;
         }
+
+        if (Input.GetButtonUp("Jump"))
+        {
+            jumpReleased = true;
+        }
+
+        if (jumpBufferCounter > 0f)
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+
+        UpdateFacing();
     }
 
     private void FixedUpdate()
     {
-        // »Áπ˚“—æ≠À¿Õˆ£¨≤ª‘ŸΩ¯––ŒÔ¿Ì‘ÀÀ„
         if (isDeath) return;
 
-        // --- 1. µÿ√ÊºÏ≤‚ ---
-        // Ω®“È∞Îæ∂∏ƒŒ™ 0.2f (±»‘≠¿¥µƒ 0.1f ¥Û“ªµ„)£¨∑¿÷π∂ØÃ¨”∞◊”∂∂∂Øµº÷¬≈–∂®Œ™¿Îµÿ
-        isGround = Physics.CheckSphere(groundCheck.position, 0.2f, Shadow);
-
-        // --- 2. À¿ÕˆºÏ≤‚ (∫À–ƒ–ﬁ∏¥) ---
-        // ¬ﬂº≠£∫ºÏ≤‚°∞–ƒ‘‡°±Œª÷√ «∑Ò±ª”∞◊”ÃÓ¬˙°£
-        // ≤Œ ˝Àµ√˜£∫
-        // - Œª÷√£∫deathCheck.position (±ÿ–Î‘⁄–ÿø⁄÷––ƒ)
-        // - ∞Îæ∂£∫0.2f (±ÿ–Î±»ƒ„µƒΩ∫ƒ“ÃÂ∞Îæ∂–°“ª»¶£¨»∑±£≤ª≈ˆµΩ’˝≥£µƒ«Ω±⁄∫Õµÿ√Ê)
-        // - ≈–∂®£∫÷ª“™’‚¿Ô√Ê”–∂´Œ˜ (CheckSphere∑µªÿtrue)£¨Àµ√˜”∞◊”º∑Ω¯…ÌÃÂ¡À -> º–À¿
-        if (Physics.CheckSphere(deathCheck.position, 0.2f, Shadow))
-        {
-            isDeath = true;
-        }
-        else
-        {
-            isDeath = false;
-        }
-
-        // --- 3. ◊¥Ã¨”Î––Œ™∏¸–¬ ---
-        anim.SetBool("isGround", isGround);
-
-        GroundMovement();
-        Jump();
-        SwitchAnim();
+        UpdateGroundState();
+        UpdateDeathState();
 
         if (isDeath)
         {
             Death();
-        }
-    }
-    void GroundMovement()
-    {
-        float horizontalMove = Input.GetAxisRaw("Horizontal");
-
-       
-        Vector3 targetVelocity = new Vector3(horizontalMove * speed, rb.velocity.y, 0);
-        rb.velocity = targetVelocity;
-
-     
-        if (horizontalMove != 0)
-        {
-            // ºÚµ•µƒ∑¿∂∂∂Ø¥¶¿Ì
-            float direction = Mathf.Sign(horizontalMove);
-            transform.localScale = new Vector3(direction * defaultXScale, 1, 1);
+            return;
         }
 
-
-
+        ApplyHorizontalMovement();
+        HandleJump();
+        ApplyBetterGravity();
+        SwitchAnim();
     }
 
-    void Jump()
+    void UpdateGroundState()
     {
+        wasGrounded = isGround;
+        isGround = groundCheck != null && Physics.CheckSphere(groundCheck.position, groundCheckRadius, Shadow);
+        anim.SetBool("isGround", isGround);
+
         if (isGround)
         {
-            // ÷ª”–µ±œ¬ΩµÀŸ∂»∫‹–° ±≤≈÷ÿ÷√Ã¯‘æ¥Œ ˝£¨∑¿÷π∏’∆Ã¯À≤º‰±ª÷ÿ÷√
-            if (rb.velocity.y <= 0.1f)
+            coyoteCounter = coyoteTime;
+            airJumpsRemaining = extraAirJumps;
+            isJump = false;
+
+            if (!wasGrounded)
             {
-                jumpCount = 2;
-                isJump = false;
+                InkEmitter();
             }
         }
-
-        if (jumpPressed)
+        else if (coyoteCounter > 0f)
         {
-
-
-
-            // ÷¥––Ã¯‘æ
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce, 0); // ’‚¿Ô÷±Ω”∏≤∏«Y «ø…“‘µƒ£¨“ÚŒ™ «À≤º‰¡¶
-
-            // ÷ª”–¬‰µÿ◊¥Ã¨œ¬ø€µ⁄“ª¥Œ£¨ªÚ’ﬂ∂˛∂ŒÃ¯ø€¥Œ ˝
-            if (isGround || jumpCount > 0)
-            {
-                jumpCount--; 
-            }
-
-            jumpPressed = false;
-            isJump = true;
+            coyoteCounter -= Time.fixedDeltaTime;
         }
+    }
+
+    void UpdateDeathState()
+    {
+        bool inDeathZone = deathCheck != null && Physics.CheckSphere(deathCheck.position, deathCheckRadius, Shadow);
+
+        if (inDeathZone)
+        {
+            deathContactTimer += Time.fixedDeltaTime;
+            isDeath = deathContactTimer >= deathConfirmTime;
+        }
+        else
+        {
+            deathContactTimer = 0f;
+            isDeath = false;
+        }
+    }
+
+    void ApplyHorizontalMovement()
+    {
+        if (moveBan)
+        {
+            moveInput = 0f;
+        }
+
+        float targetSpeed = moveInput * maxMoveSpeed;
+        float accel = Mathf.Abs(targetSpeed) > 0.01f
+            ? (isGround ? groundAcceleration : airAcceleration)
+            : (isGround ? groundDeceleration : airDeceleration);
+
+        float newX = Mathf.MoveTowards(rb.velocity.x, targetSpeed, accel * Time.fixedDeltaTime);
+        rb.velocity = new Vector3(newX, rb.velocity.y, 0f);
+    }
+
+    void HandleJump()
+    {
+        if (moveBan) return;
+        if (jumpBufferCounter <= 0f) return;
+
+        if (coyoteCounter > 0f)
+        {
+            PerformJump();
+            coyoteCounter = 0f;
+            return;
+        }
+
+        if (!isGround && airJumpsRemaining > 0)
+        {
+            airJumpsRemaining--;
+            PerformJump();
+        }
+    }
+
+    void PerformJump()
+    {
+        jumpBufferCounter = 0f;
+        jumpReleased = false;
+        isJump = true;
+
+        float jumpVelocity = Mathf.Max(rb.velocity.y, 0f);
+        rb.velocity = new Vector3(rb.velocity.x, jumpVelocity, 0f);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+    }
+
+    void ApplyBetterGravity()
+    {
+        if (isGround) return;
+
+        float gravityMultiplier = 1f;
+        if (rb.velocity.y < 0f)
+        {
+            gravityMultiplier = fallGravityMultiplier;
+        }
+        else if (!jumpHeld || jumpReleased)
+        {
+            gravityMultiplier = jumpCutGravityMultiplier;
+        }
+
+        Vector3 extraGravity = Physics.gravity * (gravityMultiplier - 1f);
+        rb.velocity += extraGravity * Time.fixedDeltaTime;
+
+        if (rb.velocity.y < -maxFallSpeed)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, -maxFallSpeed, 0f);
+        }
+
+        jumpReleased = false;
+    }
+
+    void UpdateFacing()
+    {
+        if (Mathf.Abs(moveInput) < 0.01f) return;
+
+        float direction = Mathf.Sign(moveInput);
+        transform.localScale = new Vector3(direction * defaultXScale, initialScale.y, initialScale.z);
     }
 
     void SwitchAnim()
     {
         anim.SetFloat("running", Mathf.Abs(rb.velocity.x));
 
-        // ºÚµ•µƒ◊¥Ã¨ª˙¬ﬂº≠”≈ªØ
         if (rb.velocity.y > 0.1f && !isGround)
         {
             anim.SetBool("jumping", true);
             anim.SetBool("falling", false);
-
         }
         else if (rb.velocity.y < -0.1f && !isGround)
         {
             anim.SetBool("jumping", false);
             anim.SetBool("falling", true);
-
         }
         else if (isGround)
         {
             anim.SetBool("jumping", false);
             anim.SetBool("falling", false);
-
         }
     }
 
     public void Death()
     {
-        Debug.Log("ÕÊº““—À¿Õˆ");
+        Debug.Log("Áé©ÂÆ∂Â∑≤Ê≠ª‰∫°");
         anim.SetBool("die", true);
-        rb.velocity = Vector3.zero; // À¿ÕˆÕ£÷π“∆∂Ø
-        rb.isKinematic = true; // Õ£÷πŒÔ¿Ì‘ÀÀ„
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;
     }
 
-    // °æ–¬‘ˆ°øµ˜ ‘∏®÷˙£∫‘⁄ Scene ¥∞ø⁄ª≠≥ˆºÏ≤‚∑∂Œß
     private void OnDrawGizmosSelected()
     {
         if (groundCheck != null)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
+
+        if (deathCheck != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(deathCheck.position, deathCheckRadius);
         }
     }
 
@@ -193,7 +290,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void playerSoundSFX(SoundType soundType)
     {
-
         switch (soundType)
         {
             case SoundType.Run:
@@ -209,8 +305,30 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
     }
+
     public void StopLoopSoundSFX()
     {
         AudioManager.Instance.StopLoop(runAudioClip);
+    }
+
+    public void BanInput(MemoryType item)
+    {
+        moveBan = true;
+        Input.imeCompositionMode = IMECompositionMode.Off;
+    }
+
+    public void OpenInput()
+    {
+        moveBan = false;
+        Input.imeCompositionMode = IMECompositionMode.On;
+    }
+
+    public void InkEmitter()
+    {
+        if (ink == null || groundCheck == null) return;
+
+        GameObject obj = Instantiate(ink);
+        obj.transform.localScale = transform.localScale * -1f;
+        obj.transform.position = groundCheck.position;
     }
 }

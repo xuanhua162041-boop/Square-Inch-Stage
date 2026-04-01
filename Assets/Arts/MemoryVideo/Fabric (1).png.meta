@@ -1,0 +1,1390 @@
+fileFormatVersion: 2
+guid: 4a3ff99a91ae91a4db5cbdb941de15c6
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Fabric (1)_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1811.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b984a13304661f418ac8c30586552da
+      internalID: 655245456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_1
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 1811.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b316eb90893a5ed4f94dc9b4f23cc605
+      internalID: -1563047813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_2
+      rect:
+        serializedVersion: 2
+        x: 1284
+        y: 1811.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adcc9832a4dcd18408f1fda5e1d8fb0c
+      internalID: -378806906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_3
+      rect:
+        serializedVersion: 2
+        x: 1926
+        y: 1811.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d546e6f7d6166a24dab44458b5e63116
+      internalID: -265978098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_4
+      rect:
+        serializedVersion: 2
+        x: 2568
+        y: 1811.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c51340a2496339241b8542a22aee8b11
+      internalID: -1374354569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_5
+      rect:
+        serializedVersion: 2
+        x: 3210
+        y: 1811.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f58d27169158314682756c4e38bbfb4
+      internalID: 377964711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_6
+      rect:
+        serializedVersion: 2
+        x: 3852
+        y: 1811.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cca67d7cf26f7041b23a15303ac1581
+      internalID: 829069606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_7
+      rect:
+        serializedVersion: 2
+        x: 4494
+        y: 1811.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25b76b2cea35ebf45a5acf14cae227ea
+      internalID: 945546481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_8
+      rect:
+        serializedVersion: 2
+        x: 5136
+        y: 1811.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d030d09a4a65ad4fad1b8ec4cc5af13
+      internalID: 1481747576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_9
+      rect:
+        serializedVersion: 2
+        x: 5778
+        y: 1811.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8b95c651fae67e47b7376cf20c0adc9
+      internalID: 1941712927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1449.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0905600506204a44ab0c02afa19515f0
+      internalID: 1127147864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_11
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 1449.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9014c81bb29ab234e8ad0b1cf04fef03
+      internalID: -1373744345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_12
+      rect:
+        serializedVersion: 2
+        x: 1284
+        y: 1449.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ccdfaa4c836a4448bdc9941b8626f1a
+      internalID: 396610902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_13
+      rect:
+        serializedVersion: 2
+        x: 1926
+        y: 1449.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fb4d02c997ae274bbeef88eb3c4a808
+      internalID: 402825452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_14
+      rect:
+        serializedVersion: 2
+        x: 2568
+        y: 1449.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fe6e2d5f57c29546b01fb46609ea144
+      internalID: 1973287887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_15
+      rect:
+        serializedVersion: 2
+        x: 3210
+        y: 1449.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8049e4f44515b9047ba44c698735ff73
+      internalID: 155243143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_16
+      rect:
+        serializedVersion: 2
+        x: 3852
+        y: 1449.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a6d3985258018d4a9c5db908169e989
+      internalID: 142576880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_17
+      rect:
+        serializedVersion: 2
+        x: 4494
+        y: 1449.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d48211d0fa747ef418de2c9c71abc13b
+      internalID: 59716052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_18
+      rect:
+        serializedVersion: 2
+        x: 5136
+        y: 1449.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 091b065329c2870438d9b7a5eaa347d8
+      internalID: -1249415765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_19
+      rect:
+        serializedVersion: 2
+        x: 5778
+        y: 1449.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2961a5c1e82dc74dac99fcc94669d8b
+      internalID: -1053998003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1087.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08c402ac564071e459f5f85b882e3c79
+      internalID: 1511960492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_21
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 1087.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1bd4cb59df8fb245a2b82b4bffd06ad
+      internalID: 1059426815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_22
+      rect:
+        serializedVersion: 2
+        x: 1284
+        y: 1087.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b991f899791a324dbc9735d5cef5320
+      internalID: -198868466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_23
+      rect:
+        serializedVersion: 2
+        x: 1926
+        y: 1087.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1771b29296d7dac419192e34a188e3c8
+      internalID: 1557548619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_24
+      rect:
+        serializedVersion: 2
+        x: 2568
+        y: 1087.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04f268d324688564598462dc6e76db8a
+      internalID: 1701251877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_25
+      rect:
+        serializedVersion: 2
+        x: 3210
+        y: 1087.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c2812340e2d7f54c873d25a5bed9436
+      internalID: -433759907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_26
+      rect:
+        serializedVersion: 2
+        x: 3852
+        y: 1087.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7af2739a20399145b6228ebb98850af
+      internalID: 1271216718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_27
+      rect:
+        serializedVersion: 2
+        x: 4494
+        y: 1087.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03270894a47474d40bdc9c811c0f491e
+      internalID: -1241387109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_28
+      rect:
+        serializedVersion: 2
+        x: 5136
+        y: 1087.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4db7358f90d830841bfee6bbba6a18c0
+      internalID: 555073235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_29
+      rect:
+        serializedVersion: 2
+        x: 5778
+        y: 1087.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ef71826804424741b1b01c53357da9e
+      internalID: -672058102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 725.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3bb83963bc4eaf74f897026a73c5b1d4
+      internalID: 609967472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_31
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 725.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d1d11a88c3c37b4faee9276924b1d45
+      internalID: 33526264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_32
+      rect:
+        serializedVersion: 2
+        x: 1284
+        y: 725.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2eccc685cd3efbc4492738840104aa4e
+      internalID: -1846728798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_33
+      rect:
+        serializedVersion: 2
+        x: 1926
+        y: 725.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c5c238859275d94cb08ac85fe267844
+      internalID: 1966480749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_34
+      rect:
+        serializedVersion: 2
+        x: 2568
+        y: 725.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c230930ae3d9ccc43852792e8c28a1e2
+      internalID: -1956559987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_35
+      rect:
+        serializedVersion: 2
+        x: 3210
+        y: 725.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d62a63305860254e8aee12410ca4294
+      internalID: -2005831632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_36
+      rect:
+        serializedVersion: 2
+        x: 3852
+        y: 725.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87f1dd360f678df428f62ffabab5ecef
+      internalID: -2089403287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_37
+      rect:
+        serializedVersion: 2
+        x: 4494
+        y: 725.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7baa01b658f6a954fb81821251fb97e2
+      internalID: -1103373280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_38
+      rect:
+        serializedVersion: 2
+        x: 5136
+        y: 725.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa3a1ebf3209d3f48ad93c77248336f8
+      internalID: -1205383517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_39
+      rect:
+        serializedVersion: 2
+        x: 5778
+        y: 725.6666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4b471ce174ecfb409013e6b1d5f8997
+      internalID: 1740840175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 363.66666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f17070509f0aae04eaece2568c8730f5
+      internalID: 829167636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_41
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 363.66666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 880f899b455102f43a72ad2a81317d36
+      internalID: -1388081413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_42
+      rect:
+        serializedVersion: 2
+        x: 1284
+        y: 363.66666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edfabf49f41ba89439ddb49640eafe1a
+      internalID: 821126698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_43
+      rect:
+        serializedVersion: 2
+        x: 1926
+        y: 363.66666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22ab83b30cd65da40b2b633c0e0bc11c
+      internalID: -1124704390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_44
+      rect:
+        serializedVersion: 2
+        x: 2568
+        y: 363.66666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d0e2006a0e5402429d89201165b0e44
+      internalID: 1113089269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_45
+      rect:
+        serializedVersion: 2
+        x: 3210
+        y: 363.66666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ab907067e464914981d29738d105d59
+      internalID: 1859752616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_46
+      rect:
+        serializedVersion: 2
+        x: 3852
+        y: 363.66666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20d1cd6aac3b63144811a9841357bdb1
+      internalID: 437032501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_47
+      rect:
+        serializedVersion: 2
+        x: 4494
+        y: 363.66666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b63669d56fad932488a16e77c79f5bd8
+      internalID: 2123818005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_48
+      rect:
+        serializedVersion: 2
+        x: 5136
+        y: 363.66666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06ac04d2765eb6b418095e9ab898e64d
+      internalID: -2004229223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_49
+      rect:
+        serializedVersion: 2
+        x: 5778
+        y: 363.66666
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ed9ca7fbf2537a42bb3fadafa25c194
+      internalID: 669996901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_50
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1.6666565
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 748b504d144b8fa4489d06e9546e35d3
+      internalID: -1977624485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_51
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 1.6666565
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1c80fb7cc1fba846a91c566d890d7aa
+      internalID: -1005509971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_52
+      rect:
+        serializedVersion: 2
+        x: 1284
+        y: 1.6666565
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7e61a32b10948c449896f079320c23d
+      internalID: -168325296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_53
+      rect:
+        serializedVersion: 2
+        x: 1926
+        y: 1.6666565
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f3fc7e7ca0b38c44ba0c84e13e4146c
+      internalID: -1137260323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_54
+      rect:
+        serializedVersion: 2
+        x: 2568
+        y: 1.6666565
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbbaa187e07c29649a1f0ea678e20b21
+      internalID: 1156887543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_55
+      rect:
+        serializedVersion: 2
+        x: 3852
+        y: 1.6666565
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebd7dd5d43a202d43957212b0283731d
+      internalID: 1655777285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_56
+      rect:
+        serializedVersion: 2
+        x: 5136
+        y: 1.6666565
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e27000a80e402164dbfd0a8de7acd1d7
+      internalID: -1662583719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fabric (1)_57
+      rect:
+        serializedVersion: 2
+        x: 5778
+        y: 1.6666565
+        width: 642.2
+        height: 362.33334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee0569afc52e2ec41949139aceb09903
+      internalID: 1660256859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 1e781be43d36adc40bf181607db59b8f
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Fabric (1)_0: 655245456
+      Fabric (1)_1: -1563047813
+      Fabric (1)_10: 1127147864
+      Fabric (1)_11: -1373744345
+      Fabric (1)_12: 396610902
+      Fabric (1)_13: 402825452
+      Fabric (1)_14: 1973287887
+      Fabric (1)_15: 155243143
+      Fabric (1)_16: 142576880
+      Fabric (1)_17: 59716052
+      Fabric (1)_18: -1249415765
+      Fabric (1)_19: -1053998003
+      Fabric (1)_2: -378806906
+      Fabric (1)_20: 1511960492
+      Fabric (1)_21: 1059426815
+      Fabric (1)_22: -198868466
+      Fabric (1)_23: 1557548619
+      Fabric (1)_24: 1701251877
+      Fabric (1)_25: -433759907
+      Fabric (1)_26: 1271216718
+      Fabric (1)_27: -1241387109
+      Fabric (1)_28: 555073235
+      Fabric (1)_29: -672058102
+      Fabric (1)_3: -265978098
+      Fabric (1)_30: 609967472
+      Fabric (1)_31: 33526264
+      Fabric (1)_32: -1846728798
+      Fabric (1)_33: 1966480749
+      Fabric (1)_34: -1956559987
+      Fabric (1)_35: -2005831632
+      Fabric (1)_36: -2089403287
+      Fabric (1)_37: -1103373280
+      Fabric (1)_38: -1205383517
+      Fabric (1)_39: 1740840175
+      Fabric (1)_4: -1374354569
+      Fabric (1)_40: 829167636
+      Fabric (1)_41: -1388081413
+      Fabric (1)_42: 821126698
+      Fabric (1)_43: -1124704390
+      Fabric (1)_44: 1113089269
+      Fabric (1)_45: 1859752616
+      Fabric (1)_46: 437032501
+      Fabric (1)_47: 2123818005
+      Fabric (1)_48: -2004229223
+      Fabric (1)_49: 669996901
+      Fabric (1)_5: 377964711
+      Fabric (1)_50: -1977624485
+      Fabric (1)_51: -1005509971
+      Fabric (1)_52: -168325296
+      Fabric (1)_53: -1137260323
+      Fabric (1)_54: 1156887543
+      Fabric (1)_55: 1655777285
+      Fabric (1)_56: -1662583719
+      Fabric (1)_57: 1660256859
+      Fabric (1)_6: 829069606
+      Fabric (1)_7: 945546481
+      Fabric (1)_8: 1481747576
+      Fabric (1)_9: 1941712927
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
